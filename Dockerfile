@@ -33,7 +33,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 
 # Cambiar el UID y GID de www-data para que coincida con el del usuario anfitrión
 # Esta es la parte clave para resolver el problema de permisos
-RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
+# RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -41,11 +41,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy application code
 COPY . /var/www
 
-# Set correct permissions for storage and bootstrap cache
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# # Set correct permissions for storage and bootstrap cache
+# RUN chown -R 777 www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Change current user to www
-USER www-data
+# # Change current user to www
+# USER www-data
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
