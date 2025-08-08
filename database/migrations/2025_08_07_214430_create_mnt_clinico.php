@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('mnt_clinico', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('paciente_id');
-            $table->unsignedBigInteger('consulta_id');
             $table->date('fecha_consulta');
             $table->decimal('total_pagar', 10, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('paciente_id')->references('id')->on('mnt_paciente');
-            $table->foreign('consulta_id')->references('id')->on('mnt_consulta');
         });
     }
 
