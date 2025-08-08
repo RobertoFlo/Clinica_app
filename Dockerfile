@@ -33,7 +33,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 
 # Cambiar el UID y GID de www-data para que coincida con el del usuario anfitrión
 # Esta es la parte clave para resolver el problema de permisos
-# RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
+RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
