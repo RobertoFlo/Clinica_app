@@ -15,7 +15,7 @@ class CtlAlergiaController extends Controller
     {
 
         return view('alergia.index', [
-            'alergias' => CtlAlergia::all(),
+            'alergias' => CtlAlergia::where('deleted_at', 'is', null)->get(),
         ]);
     }
 
