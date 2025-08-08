@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Usamos Schema::table para modificar una tabla existente
         Schema::table('mnt_clinico', function (Blueprint $table) {
             $table->unsignedBigInteger('consulta_id');
             $table->foreign('consulta_id')->references('id')->on('mnt_consulta');
-           // $table->enum('estado', ['Pendiente', 'Finalizado', 'Cancelado'])->default('Pendiente')->after('total_pagar');
         });
     }
 
@@ -24,7 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // En el método down, revertimos el cambio eliminando la columna
         Schema::table('mnt_clinico', function (Blueprint $table) {
             $table->dropColumn('consulta_id');
         });
