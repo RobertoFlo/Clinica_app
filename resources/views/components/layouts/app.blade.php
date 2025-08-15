@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', ' ')</title>
+    <title>{{ $title ?? 'Clínica App' }}</title>
     @vite('resources/css/app.css')
     @livewireStyles
+    @vite(['resources/js/app.js'])
 </head>
 <body class="">
     {{-- <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden">
@@ -38,12 +39,11 @@
             @endif
     </header> --}}
     <main class="w-full mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-6xl font-bold text-center mb-4" >@yield('title', 'Clínica App')</h1>
-        @yield('content')
+        <h1 class="text-6xl font-bold text-center mb-4" >{{ $title ?? 'Clínica App' }}</h1>
+        {{ $slot }}
+        @livewireScriptConfig
     </main>
     @livewireScripts
-    @yield('scripts')
-
 </body>
 
 </html>

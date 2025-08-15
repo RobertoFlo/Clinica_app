@@ -25,7 +25,7 @@
                                     class="px-6 py-4 text-md font-medium{{ $field === 'deleted_at' ? '   w-[275px]' : '' }} ">
                                     @if ($field === 'deleted_at')
                                         <a
-                                            class="border rounded px-2 py-1  text-center w-4/12 px-4 py-2 {{ $data[$field] ? 'bg-red-800 text-white border-red-800' : 'bg-green-800 text-white border-green-800' }}">
+                                            class="border rounded px-2 py-1  text-center w-4/12 px-4 py-2 {{ $data[$field] ? 'bg-red-600 text-white border-red-600' : 'bg-green-800 text-white border-green-800' }}">
                                             {{ $data[$field] ? 'Inactivo' : 'Activo' }}
                                         </a>
                                     @else
@@ -71,12 +71,24 @@
                                         @endif
                                         @if ($acciones->contains('eliminar'))
                                             <a type="button" wire:click="seleccion({{ $data['id'] }},'eliminar')"
-                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 focus:outline-hidden focus:bg-red-600 disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer">
-                                                <svg class="h-4 w-4 " fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-9V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
+                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer {{ $data['deleted_at'] ? 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600' : 'bg-red-500 hover:bg-red-600 focus:bg-red-600' }}">
+                                                {{-- Cambia el ícono según el estado de deleted_at --}}
+                                                @if ($data['deleted_at'])
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        class="w-4 h-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M9 15L3 9m0 0l6-6m-6 6h12a6 6 0 010 12h-3" />
+                                                    </svg>
+                                                @else
+                                                    <svg class="h-4 w-4 " fill="none" viewBox="0 0 24 24"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-9V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                @endif
+
+
                                             </a>
                                         @endif
                                     </div>

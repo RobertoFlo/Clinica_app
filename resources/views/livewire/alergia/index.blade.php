@@ -1,15 +1,9 @@
-@extends('layouts.app')
-
-@section('title', 'Catálogo de Alergias')
-
 @php
     $headers = ['Nombre', 'Estado'];
     $fields = ['nombre', 'deleted_at'];
     $fields_especial = ['name', 'texto'];
     $acciones = collect(['editar', 'eliminar']);
-
 @endphp
-@section('content')
     <div>
         <div class="flex justify-center">
             <div class="w-full max-w-6xl">
@@ -25,4 +19,3 @@
             </div>
         </div>
     </div>
-@endsection
