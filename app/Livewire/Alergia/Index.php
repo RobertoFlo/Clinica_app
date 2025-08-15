@@ -3,14 +3,20 @@
 namespace App\Livewire\Alergia;
 
 use App\Models\CtlAlergia;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Attributes\On;
+
+
 class Index extends Component
 {
-    #[On('tabla')]
-    public function tabla($id, $accion)
+    public $id ;
+    public $accion;
+
+    #[On('seleccion')]
+    public function seleccion_tabla($id,$accion)
     {
-        logger('Evento tabla-accion recibido', ['id' => $id, 'accion' => $accion]);
+        logger('recibido', ['id' => $id, 'accion' => $accion]);
         switch ($accion) {
             case 'eliminar':
                 $this->eliminar($id);
@@ -30,11 +36,11 @@ class Index extends Component
             if ($alergia) {
                 $alergia->delete();
                 // Opcionalmente mostrar mensaje de éxito
-                session()->flash('message', 'Alergia eliminada correctamente.');
+                // session()->flash('message', 'Alergia eliminada correctamente.');
             }
         } catch (\Exception $e) {
             // Manejar errores
-            session()->flash('error', 'Error al eliminar la alergia.');
+            // session()->flash('error', 'Error al eliminar la alergia.');
         }
     }
 
