@@ -7,13 +7,12 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Attributes\On;
-
+use Illuminate\Support\Facades\DB;
 #[Title('Catálogo de Alergias')]
 class Index extends Component
 {
-    public $id;
-    public $accion;
-
+    public $datos;
+    public $showModal = false;
     #[On('seleccion')]
     public function seleccion_tabla($id, $accion)
     {
@@ -30,26 +29,31 @@ class Index extends Component
                 break;
         }
     }
+    public function mount()
+    {
+        $this->loadData();
+    }
+
+    private function loadData()
+    {
+        $this->datos = CtlAlergia::withTrashed()->orderBy('id')->get();
+    }
+
     public function eliminar($id)
     {
-
-        $alergia = CtlAlergia::find($id);
-
-        if ($alergia->deleted_at !== null) {
-            $alergia->deleted_at = null; // Restaurar el registro
+        $alergia = CtlAlergia::withTrashed()->find($id);
+        if ($alergia->deleted_at) {
+            $alergia->deleted_at = null;
             $alergia->save();
+            $this->render();
         } else {
             $alergia->delete();
+            $this->render();
         }
     }
 
-
     public function render()
     {
-        // Usamos withTrashed() para obtener todos los registros, incluyendo los eliminados
-        $datos = CtlAlergia::withTrashed()->get();
-        return view('livewire.alergia.index', [
-            'datos' => $datos
-        ]);
+        return view('livewire.alergia.index');
     }
 }

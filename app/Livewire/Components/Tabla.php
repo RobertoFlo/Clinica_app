@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Components;
 
-use App\Livewire\Alergia\Index;
 use Livewire\Component;
 
 class Tabla extends Component
@@ -16,9 +15,7 @@ class Tabla extends Component
 
     public function seleccion($id, $accion)
     {
-        logger('Método tabla ', ['id' => $id, 'accion' => $accion]);
-        $this->dispatch('seleccion', id: $id, accion: $accion)->to(Index::class, 'seleccion_tabla');
-        logger('Despachado', ['id' => $id, 'accion' => $accion]);
+        $this->dispatch('seleccion', id: $id, accion: $accion);
     }
 
     public function render()

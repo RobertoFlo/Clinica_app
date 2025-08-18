@@ -1,7 +1,7 @@
 <div class=" w-full -m-1.5 overflow-x-auto">
     <div class="p-1.5 min-w-full inline-block align-middle">
         <div class="overflow-hidden">
-            <table class="min-w-full table-fixed">
+            <table class="min-w-full table-fixed" wire:poll.1s>
                 <thead class=" dark:bg-blue-500  border-b ">
                     <tr class="divide-gray-200 dark:divide-neutral-700">
                         @foreach ($headers as $header)
@@ -25,12 +25,12 @@
                                     class="px-6 py-4 text-md font-medium{{ $field === 'deleted_at' ? '   w-[275px]' : '' }} ">
                                     @if ($field === 'deleted_at')
                                         <a
-                                            class="border rounded px-2 py-1  text-center w-4/12 px-4 py-2 {{ $data[$field] ? 'bg-red-600 text-white border-red-600' : 'bg-green-800 text-white border-green-800' }}">
-                                            {{ $data[$field] ? 'Inactivo' : 'Activo' }}
+                                            class="border rounded px-2 py-1  text-center w-4/12 px-4 py-2 {{ $data->$field ? 'bg-red-600 text-white border-red-600' : 'bg-green-800 text-white border-green-800' }}">
+                                            {{ $data->$field ? 'Inactivo' : 'Activo' }}
                                         </a>
                                     @else
-                                        @if (is_array($data[$field] ?? null) && isset($especiales))
-                                            @foreach ($data[$field] as $item)
+                                        @if (is_array($data->$field ?? null) && isset($especiales))
+                                            @foreach ($data->$field as $item)
                                                 @foreach ($especiales as $especial)
                                                     @if (isset($item[$especial]))
                                                         {{ $item[$especial] }}
@@ -38,7 +38,7 @@
                                                 @endforeach
                                             @endforeach
                                         @else
-                                            {{ $data[$field] }}
+                                            {{ $data->$field }}
                                         @endif
                                     @endif
                                 </td>
@@ -49,7 +49,7 @@
                                     <div class="flex justify-center items-center gap-2">
                                         {{-- Verifica si hay acciones y genera los botones correspondientes --}}
                                         @if ($acciones->contains('agregar'))
-                                            <a type="button" wire:click="seleccion({{ $data['id'] }},'agregar' )"
+                                            <a type="button" wire:click="seleccion({{ $data->id }},'agregar' )"
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-teal-500 text-white hover:bg-teal-600 focus:outline-hidden focus:bg-teal-600 disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer">
                                                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -59,7 +59,7 @@
                                             </a>
                                         @endif
                                         @if ($acciones->contains('editar'))
-                                            <a type="button" wire:click="seleccion({{ $data['id'] }},'editar')"
+                                            <a type="button" wire:click="seleccion({{ $data->id }},'editar')"
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-hidden focus:bg-yellow-600 disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -70,10 +70,10 @@
                                             </a>
                                         @endif
                                         @if ($acciones->contains('eliminar'))
-                                            <a type="button" wire:click="seleccion({{ $data['id'] }},'eliminar')"
-                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer {{ $data['deleted_at'] ? 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600' : 'bg-red-500 hover:bg-red-600 focus:bg-red-600' }}">
+                                            <a type="button" wire:click="seleccion({{ $data->id }},'eliminar')"
+                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer {{ $data->deleted_at ? 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600' : 'bg-red-500 hover:bg-red-600 focus:bg-red-600' }}">
                                                 {{-- Cambia el ícono según el estado de deleted_at --}}
-                                                @if ($data['deleted_at'])
+                                                @if ($data->deleted_at)
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                         class="w-4 h-4">
