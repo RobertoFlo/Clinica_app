@@ -49,7 +49,7 @@
                                     <div class="flex justify-center items-center gap-2">
                                         {{-- Verifica si hay acciones y genera los botones correspondientes --}}
                                         @if ($acciones->contains('agregar'))
-                                            <a type="button" wire:click="seleccion({{ $data->id }},'agregar' )"
+                                            <a type="button" wire:click="tabla({{ $data}},'agregar' )"
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-teal-500 text-white hover:bg-teal-600 focus:outline-hidden focus:bg-teal-600 disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer">
                                                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -59,7 +59,7 @@
                                             </a>
                                         @endif
                                         @if ($acciones->contains('editar'))
-                                            <a type="button" wire:click="seleccion({{ $data->id }},'editar')"
+                                            <a type="button" wire:click="tabla({{ $data }},'editar')"
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-yellow-500 text-white hover:bg-yellow-600 focus:outline-hidden focus:bg-yellow-600 disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -70,7 +70,7 @@
                                             </a>
                                         @endif
                                         @if ($acciones->contains('eliminar'))
-                                            <a type="button" wire:click="seleccion({{ $data->id }},'eliminar')"
+                                            <a type="button" wire:click="tabla({{ $data }},'eliminar')"
                                                 class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent  text-white  focus:outline-hidden  disabled:opacity-50 disabled:pointer-events-none hover:cursor-pointer {{ $data->deleted_at ? 'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600' : 'bg-red-500 hover:bg-red-600 focus:bg-red-600' }}">
                                                 {{-- Cambia el ícono según el estado de deleted_at --}}
                                                 @if ($data->deleted_at)
@@ -107,10 +107,11 @@
             </table>
         </div>
     </div>
-</div>
-{{--
 
-indicaciones de uso:
+</div>
+
+
+{{-- indicaciones de uso:
     - headers: array con los nombres de las columnas
     - fields: array con los nombres de los campos en los datos
     - datos: array de datos a mostrar
@@ -131,6 +132,5 @@ indicaciones de uso:
         :acciones="$acciones"
         :especiales="['name', 'texto']"
         wire:listen="filaSeleccionada"
-    />
+    /> --}}
 
---}}

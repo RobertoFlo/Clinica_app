@@ -3,35 +3,46 @@
 namespace App\Livewire\Alergia;
 
 use App\Models\CtlAlergia;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Attributes\On;
-use Illuminate\Support\Facades\DB;
 #[Title('Catálogo de Alergias')]
 class Index extends Component
 {
     public $datos;
+    public $item;
+    public $seleccion = null;
     public $showModal = false;
-    #[On('seleccion')]
-    public function seleccion_tabla($id, $accion)
+
+    #[On('item_tabla')]
+    public function seleccion_tabla($item, $accion)
     {
-        logger('recibido', ['id' => $id, 'accion' => $accion]);
-        switch ($accion) {
-            case 'eliminar':
-                $this->eliminar($id);
-                break;
-            case 'editar':
-                $this->editar($id);
-                break;
-            case 'agregar':
-                $this->agregar($id);
-                break;
-        }
+        $this->item = $item;
+        $this->seleccion = $accion;
+        $this->showModal = true;
     }
     public function mount()
     {
         $this->loadData();
+    }
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
+    public function aceptarModal()
+    {
+        $this->showModal = false;
+        switch ($this->seleccion) {
+            case 'eliminar':
+                $this->eliminar($this->item['id']);
+                break;
+            case 'editar':
+                $this->editar($this->item['id']);
+                break;
+            case 'agregar':
+                $this->agregar($this->item['id']);
+                break;
+        }
     }
 
     private function loadData()
@@ -39,9 +50,9 @@ class Index extends Component
         $this->datos = CtlAlergia::withTrashed()->orderBy('id')->get();
     }
 
-    public function eliminar($id)
+    public function eliminar($item)
     {
-        $alergia = CtlAlergia::withTrashed()->find($id);
+        $alergia = CtlAlergia::withTrashed()->find($item);
         if ($alergia->deleted_at) {
             $alergia->deleted_at = null;
             $alergia->save();

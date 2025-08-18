@@ -12,10 +12,9 @@ class Tabla extends Component
     public $acciones;
     public $especiales;
 
-
-    public function seleccion($id, $accion)
+    public function tabla($item, $accion)
     {
-        $this->dispatch('seleccion', id: $id, accion: $accion);
+        $this->dispatch('item_tabla', item: $item, accion: $accion);
     }
 
     public function render()
