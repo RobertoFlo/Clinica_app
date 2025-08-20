@@ -3,4 +3,4 @@ import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.e
 
 
 Livewire.start()
-import 'preline';
+// import 'preline';

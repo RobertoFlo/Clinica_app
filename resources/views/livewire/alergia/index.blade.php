@@ -3,11 +3,10 @@
     $fields = ['nombre', 'deleted_at'];
     $fields_especial = ['name', 'texto'];
     $acciones = collect(['editar', 'eliminar']);
-    // $data = $datos;
 @endphp
 <div>
     <div class="flex justify-center">
-        <div class="w-full max-w-6xl">
+        <div class="w-full">
             @livewire('components.tabla', [
                 'datos' => $datos,
                 'fields' => $fields,
