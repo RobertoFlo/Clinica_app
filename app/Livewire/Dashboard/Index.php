@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+#[Title('Dashboard')]
 
 class Index extends Component
 {

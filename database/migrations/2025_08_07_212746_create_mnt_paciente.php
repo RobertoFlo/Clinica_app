@@ -34,3 +34,4 @@ return new class extends Migration
         Schema::dropIfExists('mnt_paciente');
     }
 };
+ 

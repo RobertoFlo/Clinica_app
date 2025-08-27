@@ -11,7 +11,7 @@ class Slidebar extends Component
 
     #[On('despligue')]
     public function toggleSidebar()
-    {
+    {  
         $this->sidebarIsOpen = !$this->sidebarIsOpen;
     }
     public function render()

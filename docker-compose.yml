@@ -36,27 +36,27 @@ services:
         #   - ./storage:/var/www/storage
         networks:
             - laravel
-        depends_on:
-            - db
+        # depends_on:
+        #     - db
     # PostgreSQL service
-    db:
-        image: postgres:13
-        container_name: db
-        restart: unless-stopped
-        environment:
-            POSTGRES_DB: clinica_app
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: Admin123
-        volumes:
-            - pgdata:/var/lib/postgresql/data
-        ports:
-            - "5432:5432"
-        networks:
-            - laravel
+#     db:
+#         image: postgres:13
+#         container_name: db
+#         restart: unless-stopped
+#         environment:
+#             POSTGRES_DB: clinica_app
+#             POSTGRES_USER: root
+#             POSTGRES_PASSWORD: Admin123
+#         volumes:
+#             - pgdata:/var/lib/postgresql/data
+#         ports:
+#             - "5432:5432"
+#         networks:
+#             - laravel
 
-# Volumes for persisting data
-volumes:
-    pgdata:
+# # Volumes for persisting data
+# volumes:
+#     pgdata:
 
 # Networks for container communication
 networks:

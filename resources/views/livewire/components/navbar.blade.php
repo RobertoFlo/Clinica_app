@@ -98,7 +98,7 @@
                     class="w-full text-lg font-medium text-on-surface focus:underline dark:text-on-surface-dark">Blog</a>
             </li>
             <hr role="none" class="my-2 border-outline dark:border-outline-dark">
-            <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Dashboard</a></li>
+            <li class="p-2"><a href="/dashboard" wire:navigate class="w-full text-on-surface focus:underline">Dashboard</a></li>
             <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Subscription</a></li>
             <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Settings</a></li>
             <!-- CTA Button -->

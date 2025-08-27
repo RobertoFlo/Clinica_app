@@ -1,6 +1,6 @@
-<div x-data="{ sidebarIsOpen: @entangle('sidebarIsOpen') }" x-on:click.outside="sidebarIsOpen = false">
+<div x-data="{ sidebarIsOpen: @entangle('sidebarIsOpen') }">
     <button class="fixed left-25  top-[6px] z-20 rounded-full  p-4 md:hidden text-white "
-        x-on:click="sidebarIsOpen = !sidebarIsOpen">
+        wire:click="toggleSidebar">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5" aria-hidden="true">
             <path
                 d="M0 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5-1v12h9a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zM4 2H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h2z" />
@@ -18,7 +18,7 @@
             <div class="flex items-center justify-between">
                 <h3 class="text-2xl font-medium ">Menu</h3>
                 <!-- Botón para cerrar la barra lateral -->
-                <button class=" " x-on:click="sidebarIsOpen = false">
+                <button class="hover:cursor-pointer" wire:click="toggleSidebar">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"
                         aria-hidden="true">
                         <path
