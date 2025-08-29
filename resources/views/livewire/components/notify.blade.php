@@ -1,7 +1,7 @@
 <div class="fixed top-4 right-4 z-50 flex flex-col gap-2">
     @foreach($notifications as $notification)
         <div x-data="{isVisible:{{ $notification['open'] }},timeout: null,}" x-init="timeout = setTimeout(() => {
-                                isVisible = false; $wire.removeNotification('{{ $notification['id'] }}');}, 4000);"
+                                $wire.removeNotification('{{ $notification['id'] }}');}, 5000);"
             x-show="isVisible" x-transition:enter="transition duration-300 ease-out" x-transition:enter-end="translate-y-0"
             x-transition:enter-start="translate-y-8" x-transition:leave="transition duration-300 ease-in"
             x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"
@@ -59,7 +59,7 @@
                 </div>
                 <!--Dismiss Button -->
                 <button type="button" class="ml-auto" aria-label="dismiss notification"
-                    @click="isVisible = false; $wire.removeNotification('{{ $notification['id'] }}')">
+                    @click="$wire.removeNotification('{{ $notification['id'] }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none"
                         stroke-width="2" class="size-5 shrink-0" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

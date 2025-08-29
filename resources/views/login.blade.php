@@ -22,7 +22,7 @@
 <body class="bg-gray-900">
   <div class="flex h-screen justify-center items-center">
     <div
-      class=" bg-amber-50 rounded-2xl lg:w-5/12 xl:w-4/12  md:w-6/12 sm:w-8/12 w-full m-4 px-6 py-12 lg:px-8">
+      class=" bg-amber-50 rounded-2xl lg:w-5/12 xl:w-4/12  md:w-6/12 sm:w-8/12 w-full m-4 px-6 py-12 lg:px-8  shadow-lg shadow-white border-2 border-gray-400">
       <form action="{{ route('inicio.session') }}" method="POST" class="flex flex-col w-full justify-center items-center gap-4">
         @csrf
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -30,7 +30,7 @@
           </h2>
         </div>
         <div class="flex w-full max-w-xl flex-col gap-1 text-on-surface ">
-          <label for="email" class="w-fit pl-0.5 text-sm">User</label>
+          <label for="email" class="w-fit pl-0.5 text-sm">Correo</label>
           <input id="email" type="text"
             class="w-full rounded-radius border border-outline bg-surface-alt px-2 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-75 border-gray-300 @error('email') !border-red-600 @enderror"
             name="email" placeholder="Enter your name" autocomplete="email" value="{{old('email')}}" />

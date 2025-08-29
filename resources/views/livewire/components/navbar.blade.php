@@ -1,23 +1,16 @@
 <div>
     <nav x-data="{ mobileMenuIsOpen: false }" x-on:click.away="mobileMenuIsOpen = false"
-        class="flex items-center justify-between px-6 py-4 bg-neutral-800" aria-label="penguin ui menu">
+        class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 shadow-lg " aria-label="penguin ui menu">
         <!-- Brand Logo -->
-
         <a href="#" wire:click="menu"
-            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong text-white">
+            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong ">
             <span>Clinica</span>
-
         </a>
-
-
-
-
-
         <!-- Desktop Menu -->
         <ul class="hidden items-center gap-4 sm:flex  ">
-
             <!-- User Pic -->
-            <li x-data="{ userDropDownIsOpen: false, openWithKeyboard: false }" x-on:keydown.esc.window="userDropDownIsOpen = false, openWithKeyboard = false"
+            <li x-data="{ userDropDownIsOpen: false, openWithKeyboard: false }"
+                x-on:keydown.esc.window="userDropDownIsOpen = false, openWithKeyboard = false"
                 class="relative flex items-center">
                 <button x-on:click="userDropDownIsOpen = ! userDropDownIsOpen" x-bind:aria-expanded="userDropDownIsOpen"
                     x-on:keydown.space.prevent="openWithKeyboard = true"
@@ -25,7 +18,7 @@
                     x-on:keydown.down.prevent="openWithKeyboard = true"
                     class="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary flex items-center gap-2"
                     aria-controls="userMenu">
-                    <span class="text-lg text-white font-bold">nombre</span>
+                    <span class="text-lg font-bold">nombre</span>
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-10 rounded-full object-cover" />
                 </button>
@@ -50,9 +43,15 @@
                     <li><a href="#"
                             class="block bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden">Settings</a>
                     </li>
-                    <li><a href="#"
-                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden">Sign
-                            Out</a></li>
+                    <li>
+                        <form action="{{ route('cierrar.session') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden hover:cursor-pointer">
+                                Sign Out
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -88,23 +87,21 @@
                     </div>
                 </div>
             </li>
-            <li class="p-2"><a href="#"
-                    class="w-full text-lg font-bold text-primary focus:underline dark:text-primary-dark"
-                    aria-current="page">Products</a></li>
-            <li class="p-2"><a href="#"
-                    class="w-full text-lg font-medium text-on-surface focus:underline dark:text-on-surface-dark">Pricing</a>
-            </li>
-            <li class="p-2"><a href="#"
-                    class="w-full text-lg font-medium text-on-surface focus:underline dark:text-on-surface-dark">Blog</a>
-            </li>
-            <hr role="none" class="my-2 border-outline dark:border-outline-dark">
-            <li class="p-2"><a href="/dashboard" wire:navigate class="w-full text-on-surface focus:underline">Dashboard</a></li>
+
+            <li class="p-2"><a href="/dashboard" wire:navigate
+                    class="w-full text-on-surface focus:underline">Dashboard</a></li>
             <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Subscription</a></li>
             <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Settings</a></li>
             <!-- CTA Button -->
-            <li class="mt-4 w-full border-none"><a href="#"
-                    class="rounded-radius bg-primary border-primary px-4 py-2 block text-center font-medium tracking-wide text-on-primary hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:opacity-100 active:outline-offset-0 dark:bg-primary-dark dark:border-primary-dark dark:text-on-primary-dark dark:focus-visible:outline-primary-dark">Sign
-                    Out</a></li>
+            <li>
+                <form action="{{ route('cierrar.session') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden hover:cursor-pointer">
+                        Sign Out
+                    </button>
+                </form>
+            </li>
         </ul>
     </nav>
 

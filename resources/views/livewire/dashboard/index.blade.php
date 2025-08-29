@@ -1,3 +1,3 @@
 <div>
-    <h1>Dashboard</h1>
+    @livewire('components.titulo', ['titulo'=> 'Dashboard'])
 </div>

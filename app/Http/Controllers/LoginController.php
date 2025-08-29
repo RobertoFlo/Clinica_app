@@ -3,25 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
+use Illuminate\Http\Request;
 use App\Http\Requests\loginRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     //
-    public function login(loginRequest $request):JsonResponse
+    public function login(loginRequest $request)
     {
-   
-        dd($request->only(["email","password"]));
-        $user = $request->only(["email","password"]);
-        if($request->validated()){
+        $user = $request->only(["email", "password"]);
+      
+            if (Auth::attempt($user)) {
+             $request->session()->regenerate(); 
 
-            dd(vars: $user);
-        }
+            // Redirige al usuario
+            return redirect()->intended('/'); 
+            }
+        
+    }
+    public function logout(Request $request)
+    {
+        // 1. Cierra la sesión del usuario
+        Auth::logout();
 
-        // // Log the user in (you might want to use Laravel's Auth facade here)
-        // auth()->login($user);
+        // 2. Invalida la sesión actual
+        $request->session()->invalidate();
+        // 3. Regenera el token CSRF para prevenir ataques
+        $request->session()->regenerateToken();
 
-        // return redirect()->route('dashboard'); // Redirect to a dashboard or home page
+        // 4. Redirige al usuario a la página de inicio o login
+        return redirect('/login'); 
     }
 }

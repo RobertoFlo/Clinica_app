@@ -3,9 +3,11 @@
 namespace App\Livewire\Components;
 
 use Livewire\Component;
+use Livewire\Attributes\Reactive;
 
 class Tabla extends Component
 {
+    #[Reactive] 
     public $datos;
     public $fields;
     public $headers;
