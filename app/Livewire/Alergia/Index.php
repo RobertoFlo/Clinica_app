@@ -40,7 +40,11 @@ class Index extends Component
     }
     public function modalAlergia()
     {
-        $this->showAlergia = !$this->showAlergia;
+        $this->showAlergia = true;
+    }
+    public function modalAlergiaClose()
+    {
+        $this->showAlergia = false;
     }
     public function saveAlergia()
     {

@@ -85,7 +85,7 @@ $acciones = collect(['editar', 'eliminar']);
                             </div>
                         </div>
                         <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
-                            <button type="button" wire:click="modalAlergia" 
+                            <button type="button" wire:click="modalAlergiaClose" 
                                 class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
                                 Cancelar
                             </button>
