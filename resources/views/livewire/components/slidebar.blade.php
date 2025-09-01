@@ -1,5 +1,5 @@
 <div x-data="{ sidebarIsOpen: @entangle('sidebarIsOpen') }" class="">
-    <button class="fixed left-25  top-[6px] z-20 rounded-full  p-4 md:hidden " wire:click="toggleSidebar">
+    <button class="fixed left-25  top-[6px] z-20 rounded-full  p-4 md:hidden" wire:click="toggleSidebar">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"
             aria-hidden="true">
             <path
@@ -15,21 +15,24 @@
         x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full">
         <div class="flex flex-col gap-2 overflow-y-auto pb-6 ">
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between ">
                 <h3 class="text-2xl font-medium ">Menu</h3>
                 <!-- Botón para cerrar la barra lateral -->
-                <button class="hover:cursor-pointer  hover:bg-red-400/50 rounded-full px-2 py-2"
-                    wire:click="toggleSidebar">
-                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
-                        <path
-                            d="M8,19a3,3,0,0,1-3-3V8A3,3,0,0,1,8,5,1,1,0,0,0,8,3,5,5,0,0,0,3,8v8a5,5,0,0,0,5,5,1,1,0,0,0,0-2Zm7.71-3.29a1,1,0,0,0,0-1.42L13.41,12l2.3-2.29a1,1,0,0,0-1.42-1.42L12,10.59,9.71,8.29A1,1,0,0,0,8.29,9.71L10.59,12l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l2.29,2.3a1,1,0,0,0,1.42,0ZM16,3a1,1,0,0,0,0,2,3,3,0,0,1,3,3v8a3,3,0,0,1-3,3,1,1,0,0,0,0,2,5,5,0,0,0,5-5V8A5,5,0,0,0,16,3Z" />
-                    </svg>
-                </button>
+                <div class="flex justify-center bg-red-300 rounded-full px-2 py-2">
+                    <button class="hover:cursor-pointer  bg-red-600  text-white rounded-full px-1 py-1"
+                        wire:click="toggleSidebar">
+                        <svg fill="#ffff" width="20px" height="20px" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                            <path
+                                d="M8,19a3,3,0,0,1-3-3V8A3,3,0,0,1,8,5,1,1,0,0,0,8,3,5,5,0,0,0,3,8v8a5,5,0,0,0,5,5,1,1,0,0,0,0-2Zm7.71-3.29a1,1,0,0,0,0-1.42L13.41,12l2.3-2.29a1,1,0,0,0-1.42-1.42L12,10.59,9.71,8.29A1,1,0,0,0,8.29,9.71L10.59,12l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l2.29,2.3a1,1,0,0,0,1.42,0ZM16,3a1,1,0,0,0,0,2,3,3,0,0,1,3,3v8a3,3,0,0,1-3,3,1,1,0,0,0,0,2,5,5,0,0,0,5-5V8A5,5,0,0,0,16,3Z" />
+                        </svg>
+                    </button>
+                </div>
 
             </div>
             <div type="button" x-data="{ isExpanded: false }">
-                <div class="flex flex-row items-center gap-2 hover:cursor-pointer" x-on:click="isExpanded = ! isExpanded">
+                <div class="flex flex-row items-center gap-2 hover:cursor-pointer"
+                    x-on:click="isExpanded = ! isExpanded">
                     <svg fill="#000000" height="20px" width="20px" version="1.1" id="Icons"
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 32 32" xml:space="preserve">

@@ -1,7 +1,7 @@
 <div class="fixed top-4 right-4 z-50 flex flex-col gap-2">
     @foreach($notifications as $notification)
         <div x-data="{isVisible:{{ $notification['open'] }},timeout: null,}" x-init="timeout = setTimeout(() => {
-                                $wire.removeNotification('{{ $notification['id'] }}');}, 5000);"
+                                $wire.removeNotification('{{ $notification['id'] }}');}, 4000);"
             x-show="isVisible" x-transition:enter="transition duration-300 ease-out" x-transition:enter-end="translate-y-0"
             x-transition:enter-start="translate-y-8" x-transition:leave="transition duration-300 ease-in"
             x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"

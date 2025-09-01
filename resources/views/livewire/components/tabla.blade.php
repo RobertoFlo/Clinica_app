@@ -29,7 +29,7 @@
                                             {{ $data->$field ? 'Inactivo' : 'Activo' }}
                                         </span>
                                     @else
-                                        @if (is_array($data->$field ?? null) && isset($especiales))
+                                        @if (is_array($data->$field) && isset($especiales))
                                             @foreach ($data->$field as $item)
                                                 @foreach ($especiales as $especial)
                                                     @if (isset($item[$especial]))
@@ -37,8 +37,14 @@
                                                     @endif
                                                 @endforeach
                                             @endforeach
-                                        @else
-                                            {{ $data->$field }}
+                                        @else                                            
+                                            @foreach ($especiales as $especial)
+                                                @if (isset($data->$field[$especial]))
+                                                    {{ $data->$field[$especial] }}
+                                                @else
+                                                {{ $data->$field }}
+                                                @endif
+                                            @endforeach
                                         @endif
                                     @endif
                                 </td>

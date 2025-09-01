@@ -34,7 +34,7 @@
         Livewire.on('auto-hide-loader', () => {
             setTimeout(() => {
                 Livewire.dispatch('hide-loader');
-            }, 5000);
+            }, 4000);
         });
     });
 </script>

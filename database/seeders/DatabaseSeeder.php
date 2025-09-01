@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $user->assignRole('administrador');
         $this->call([
             carga::class,
+            CategoriaAlergiaSeeder::class,
         ]);
     }
 }
