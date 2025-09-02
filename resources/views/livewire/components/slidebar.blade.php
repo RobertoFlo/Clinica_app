@@ -57,8 +57,8 @@
                             class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 hover:text-shadow-lg/20">Alergias</a>
                     </li>
                     <li class="px-1 py-0.5 first:mt-2">
-                        <a href="#"
-                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 hover:text-shadow-lg/20">Permissions</a>
+                        <a href="/tipo-examenes" wire:navigate
+                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 hover:text-shadow-lg/20">Tipos de Examen</a>
                     </li>
                     <li class="px-1 py-0.5 first:mt-2">
                         <a href="#"

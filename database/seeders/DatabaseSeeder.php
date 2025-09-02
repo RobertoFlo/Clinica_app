@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             carga::class,
             CategoriaAlergiaSeeder::class,
+            TipoConsultaSeeder::class,
+            TipoExamenSeeder::class,
         ]);
     }
 }

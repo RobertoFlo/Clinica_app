@@ -13,5 +13,6 @@ Route::post('logout', [App\Http\Controllers\LoginController::class, 'logout'])->
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', App\Livewire\Dashboard\Index::class);
     Route::get('/alergias', Index::class);
+    Route::get('/tipo-examenes', App\Livewire\Tipoexamen\Examen::class);
 });
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 class CategoriaAlergiaSeeder extends Seeder
 {
     /**
@@ -48,5 +49,22 @@ class CategoriaAlergiaSeeder extends Seeder
                 }
             }
         }
+        DB::table('ctl_nvl_alergia')->insert([
+            [
+                'nombre' => 'Leve',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'nombre' => 'Moderada',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'nombre' => 'Severa (Anafilaxia)',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ]);
     }
 }

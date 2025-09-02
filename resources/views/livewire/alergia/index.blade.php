@@ -21,7 +21,8 @@ $acciones = collect(['editar', 'eliminar']);
             </button>
         </div>
         <div class="w-full">
-            {{-- <pre>{{ print_r($datos, true) }}</pre> --}}
+            {{--
+            <pre>{{ print_r($datos, true) }}</pre> --}}
             @livewire('components.tabla', [
             'datos' => $datos,
             'fields' => $fields,
@@ -29,7 +30,54 @@ $acciones = collect(['editar', 'eliminar']);
             'acciones' => $acciones,
             'especiales' => $fields_especial,
             ])
-           
+            <div class="mt-4 flex flex-col items-center justify-center gap-2">
+                {{-- Paginación --}}
+                <nav aria-label="pagination">
+                    <ul class="flex shrink-0 items-center gap-2 text-sm font-medium">
+                        {{-- Previous --}}
+                        <li>
+                            <a href="#" wire:click.prevent="previousPage" @if($paginator->onFirstPage())
+                                aria-disabled="true"
+                                class="opacity-50 pointer-events-none" @endif
+                                class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary
+                                dark:text-on-surface-dark dark:hover:text-primary-dark"
+                                aria-label="previous page">
+                                {{-- ...icono... --}}
+                                Previous
+                            </a>
+                        </li>
+                        {{-- Page Numbers --}}
+                        @foreach ($paginator->getUrlRange(1, $paginator->lastPage()) as $page => $url)
+                        <li>
+                            <a href="#" wire:click.prevent="gotoPage({{ $page }})"
+                                class="flex size-6 items-center justify-center rounded-full p-1 border-none 
+                                {{ $paginator->currentPage() == $page ? 'bg-blue-400 border-sky-950 font-bold text-white' : 'text-on-surface hover:text-primary' }}"
+                                aria-current="{{ $paginator->currentPage() == $page ? 'page' : false }}"
+                                aria-label="page {{ $page }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                        @endforeach
+                        {{-- Next --}}
+                        <li>
+                            <a href="#" wire:click.prevent="nextPage" @if(!$paginator->hasMorePages())
+                                aria-disabled="true"
+                                class="opacity-50 pointer-events-none" @endif
+                                class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary
+                                dark:text-on-surface-dark dark:hover:text-primary-dark"
+                                aria-label="next page">
+                                Next
+                                {{-- ...icono... --}}
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="text-xs text-gray-500 mt-2">
+                    {{-- Mostrar rango de resultados debajo del paginador --}}
+                    Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} results
+                </div>
+            </div>
+
         </div>
 
         <div x-data="{ showModal: @entangle('showModal') }">
@@ -73,8 +121,7 @@ $acciones = collect(['editar', 'eliminar']);
                     class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3/6">
                     <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-
-                            <div class="mt-2">
+                            <div class="mt-2 space-y-4">
                                 <div>
                                     <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre de la
                                         Alergia</label>
@@ -94,10 +141,18 @@ $acciones = collect(['editar', 'eliminar']);
                                                 clip-rule="evenodd" />
                                         </svg>
                                         <select id="categoria" name="categoria" autocomplete="nombre"
-                                            class="w-full appearance-none rounded-radius border border-outline bg-surface-alt px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-75 ">
-                                            <option selected>Seleccione Categoria</option>
-                                            <option value="Afghanistan">Afghanistan</option>
+                                            wire:model="categoria_seleccionada"
+                                            class="w-full appearance-none rounded-radius border border-gray-300  px-4 py-2 text-sm @error('categoria_seleccionada') !border-red-600 @enderror ">
+                                            <option value="">Seleccione Categoria</option>
+                                            @foreach ($categorias as $categoria)
+                                            <option value="{{ $categoria->id }}"
+                                                @if($categoria_seleccionada==$categoria->id) selected @endif>{{
+                                                $categoria->nombre }}</option>
+                                            @endforeach
                                         </select>
+                                        @error('categoria_seleccionada') <span class="text-red-600 text-sm">{{ $message
+                                            }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>

@@ -33,16 +33,16 @@
                                             @foreach ($data->$field as $item)
                                                 @foreach ($especiales as $especial)
                                                     @if (isset($item[$especial]))
-                                                        {{ $item[$especial] }}
+                                                    {{ is_numeric($item[$especial]) ? '$ ' . $item[$especial] : $item[$especial] }}
                                                     @endif
                                                 @endforeach
                                             @endforeach
                                         @else                                            
                                             @foreach ($especiales as $especial)
                                                 @if (isset($data->$field[$especial]))
-                                                    {{ $data->$field[$especial] }}
+                                                    {{ is_numeric($data->$field[$especial]) ? '$ ' . $data->$field[$especial] : $data->$field[$especial] }}
                                                 @else
-                                                {{ $data->$field }}
+                                                    {{ is_numeric($data->$field) ? '$ ' . $data->$field : $data->$field }}
                                                 @endif
                                             @endforeach
                                         @endif
@@ -52,17 +52,17 @@
                             @if (isset($acciones))
                                     <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium w-[280px]">
                                         @if ($acciones->contains('editar'))
-                                            <a href="#" wire:click="tabla({{ $data }},'editar')"
+                                            <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ $data->id }} , accion: 'editar' })"
                                                 class="text-indigo-600 hover:text-indigo-900">Editar</a>
                                         @endif
                                         @if ($acciones->contains('eliminar'))
-                                            <a href="#" wire:click="tabla({{ $data }},'eliminar')"
+                                            <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ $data->id }} , accion: 'eliminar' })"
                                                 class="ml-2 {{ $data->deleted_at ? 'text-green-600 hover:text-green-900' : 'hover:text-red-900 text-red-600' }}">
                                                 {{ $data->deleted_at ? 'Activar' : 'Desactivar' }}
                                             </a>
                                         @endif
                                         @if ($acciones->contains('agregar'))
-                                            <a href="#" wire:click="tabla({{ $data }},'agregar')"
+                                            <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ $data->id }} , accion: 'agregar' })"
                                                 class="ml-2 text-blue-600 hover:text-blue-900">
                                                 Agregar
                                             </a>
