@@ -14,5 +14,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', App\Livewire\Dashboard\Index::class);
     Route::get('/alergias', Index::class);
     Route::get('/tipo-examenes', App\Livewire\Tipoexamen\Examen::class);
+    Route::get('/tipo-consultas', App\Livewire\Consultas\Consulta::class);
+    Route::get('/expediente', App\Livewire\Pasiente\Expediente::class)->name('expediente');
+    Route::get('/registro-expediente', App\Livewire\Pasiente\Registroexpediente::class);
+
 });
 

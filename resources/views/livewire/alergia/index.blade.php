@@ -1,7 +1,6 @@
 @php
 $headers = ['Nombre','Categoria', 'Estado'];
-$fields = ['nombre','categoria','deleted_at'];
-$fields_especial = ['nombre'];
+$fields = ['nombre',['categoria'=>['nombre']],'deleted_at'];
 $acciones = collect(['editar', 'eliminar']);
 @endphp
 <div>
@@ -21,14 +20,11 @@ $acciones = collect(['editar', 'eliminar']);
             </button>
         </div>
         <div class="w-full">
-            {{--
-            <pre>{{ print_r($datos, true) }}</pre> --}}
             @livewire('components.tabla', [
             'datos' => $datos,
             'fields' => $fields,
             'headers' => $headers,
             'acciones' => $acciones,
-            'especiales' => $fields_especial,
             ])
             <div class="mt-4 flex flex-col items-center justify-center gap-2">
                 {{-- Paginación --}}

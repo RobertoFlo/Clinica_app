@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Livewire\Tipoexamen;
+namespace App\Livewire\Consultas;
 
+use App\Models\CtlTipoConsulta;
 use App\Models\CtlTipoExamen;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
-
-class Examen extends Component
+class Consulta extends Component
 {
     use WithPagination;
 
-    public $perPage = 5; // registros por página
+    public $perPage = 5;
     public $item = []; //Ítem seleccionado de la tabla 
     public $seleccion = null; //Acción seleccionada (eliminar, editar, agregar)
     public $modalText;  //Texto dinámico para el modal de confirmación 
-    public $showExamen = false; //Controla modal de agregar/editar 
+    public $showConsultas = false; //Controla modal de agregar/editar 
     public $showModal = false; //Controla modal de confirmación Desactivar/Activar 
     #[Validate('required|numeric|min:1.00|max:99999999.99|decimal:0,2')]
     public $precio;
@@ -24,11 +24,10 @@ class Examen extends Component
     public $nombre;
 
 
-
     #[On('item_tabla')]
     public function seleccion_tabla($itemId, $accion)
     {
-        $this->item = CtlTipoExamen::withTrashed()->find($itemId);
+        $this->item = CtlTipoConsulta::withTrashed()->find($itemId);
         if ($this->item) {
             $this->seleccion = $accion;
             $this->modalText = $this->item['deleted_at'] ? "restaurar" : "eliminar";
@@ -48,14 +47,13 @@ class Examen extends Component
     public function closeModal()
     {
         $this->showModal = false;
-    }
-    public function modalExamen()
+    }  public function modalConsulta()
     {
-        $this->showExamen = true;
+        $this->showConsultas = true;
     }
     public function modalExamenClose()
     {
-        $this->showExamen = false;
+        $this->showConsultas = false;
         $this->reset('nombre', 'precio');
         $this->resetErrorBag(); // Limpia los mensajes de error
     }
@@ -63,7 +61,7 @@ class Examen extends Component
     {
         $this->nombre = $this->item['nombre'];
         $this->precio = $this->item['precio'];
-        $this->modalExamen();
+        $this->modalConsulta();
     }
     public function gestionModal()
     {
@@ -76,25 +74,25 @@ class Examen extends Component
                 break;
         }
     }
-    public function saveExamen()
+    public function save()
     {
         $this->validate();
         $this->dispatch('show-loader');
         try {
             if ($this->item['id']) {
-                $examen = CtlTipoExamen::withTrashed()->find($this->item['id']);
-                $examen->nombre = $this->nombre;
-                $examen->precio = $this->precio;
-                $examen->save();
+                $registro = CtlTipoConsulta::withTrashed()->find($this->item['id']);
+                $registro->nombre = $this->nombre;
+                $registro->precio = $this->precio;
+                $registro->save();
                 $this->dispatch('notify', [
                     'variant' => 'success',
                     'title' => '¡Éxito!',
                     'message' => 'Registro editado correctamente.'
                 ]);
                 $this->reset('precio', 'nombre');
-                $this->showExamen = false;
+                $this->showConsultas = false;
             } else {
-                CtlTipoExamen::create([
+                CtlTipoConsulta::create([
                     'nombre' => $this->nombre,
                     'precio' => $this->precio
                 ]);
@@ -104,7 +102,7 @@ class Examen extends Component
                     'message' => 'Examen agregado correctamente.'
                 ]);
                 $this->reset('precio', 'nombre');
-                $this->showExamen = false;
+                $this->showConsultas = false;
             }
         } catch (\Exception $e) {
             $this->dispatch('notify', [
@@ -116,12 +114,12 @@ class Examen extends Component
     }
     public function eliminar()
     {
-        $examen = CtlTipoExamen::withTrashed()->find($this->item['id']);
-        if ($examen->deleted_at) {
-            $examen->deleted_at = null;
-            $examen->save();
+        $registro = CtlTipoConsulta::withTrashed()->find($this->item['id']);
+        if ($registro->deleted_at) {
+            $registro->deleted_at = null;
+            $registro->save();
         } else {
-            $examen->delete();
+            $registro->delete();
         }
         $this->closeModal();
     }
@@ -140,11 +138,12 @@ class Examen extends Component
             'precio.decimal' => 'El precio solo puede tener un máximo de 2 decimales.',
         ];
     }
+    
     public function render()
     {
-        $paginator = CtlTipoExamen::withTrashed()->orderBy('id')->paginate($this->perPage);
-        return view('livewire.tipoexamen.examen', [
-            'paginator' => $paginator,
+        $paginator = CtlTipoConsulta::withTrashed()->orderBy('id')->paginate($this->perPage);
+        return view('livewire.consultas.consulta',[
+            'paginator'=> $paginator,
             'datos' => $paginator->items(),
         ]);
     }

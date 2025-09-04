@@ -1,8 +1,9 @@
 <div>
-    @livewire('components.titulo', ['titulo' => 'Tipos de Exámenes'])
-    <div class="w-full flex justify-end px-1 mb-6">
+    {{-- Because she competes with no one, no one can compete with her. --}}
+    @livewire('components.titulo', ['titulo' => 'Tipos de Consultas'])
+     <div class="w-full flex justify-end px-1 mb-6">
         <!-- info Button with Icon -->
-        <button type="button" wire:click="modalExamen"
+        <button type="button" wire:click="modalConsulta"
             class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-blue-300 border border-blue-800 px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-info active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
             Agregar
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -16,15 +17,14 @@
     <div class="w-full">
         @livewire('components.tabla', [
         'datos' => $datos,
-        'fields' => ['nombre', 'precio','deleted_at'],
-        'headers' => ['Nombre','Precio', 'Estado'],
+        'fields' => ['nombre','precio','deleted_at'],
+        'headers' => ['Nombre','Precio','Estado'],
         'especiales' => ['deleted_at'],
         'acciones' => collect(['editar', 'eliminar']),
         ])
         <div class="mt-4 flex flex-col justify-center gap-2 px-2 w-full">
             {{ $paginator->links() }}
         </div>
-
         <div wire:show="showModal" x-transition.opacity.duration.500ms
             class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
             <div wire:show="showModal" x-transition:enter="ease-out duration-300"
@@ -54,9 +54,9 @@
                 </div>
             </div>
         </div>
-        <div wire:show="showExamen" x-transition.opacity.duration.500ms
+        <div wire:show="showConsultas" x-transition.opacity.duration.500ms
             class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
-            <div wire:show="showExamen" x-transition:enter="ease-out duration-300"
+            <div wire:show="showConsultas" x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
@@ -89,7 +89,7 @@
                         class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
                         Cancelar
                     </button>
-                    <button type="button" wire:click="saveExamen"
+                    <button type="button" wire:click="save"
                         class="mt-3 inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5  hover:bg-blue-400 sm:mt-0 sm:w-auto">
                         Aceptar
                     </button>

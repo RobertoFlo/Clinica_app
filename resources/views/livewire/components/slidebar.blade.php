@@ -13,7 +13,7 @@
         x-transition:enter="transition duration-200 ease-out" x-transition:enter-start="-translate-x-full"
         x-transition:enter-end="translate-x-0" x-transition:leave="transition ease-in duration-200 "
         x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full">
-        <div class="flex flex-col gap-2 overflow-y-auto pb-6 ">
+        <div class="flex flex-col gap-2 overflow-y-auto pb-6  space-y-3">
 
             <div class="flex items-center justify-between ">
                 <h3 class="text-2xl font-medium ">Menu</h3>
@@ -33,7 +33,7 @@
             <div type="button" x-data="{ isExpanded: false }">
                 <div class="flex flex-row items-center gap-2 hover:cursor-pointer"
                     x-on:click="isExpanded = ! isExpanded">
-                    <svg fill="#000000" height="20px" width="20px" version="1.1" id="Icons"
+                    <svg fill="#71717A" height="30px" width="30px" version="1.1" id="Icons"
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 32 32" xml:space="preserve">
                         <g>
@@ -48,23 +48,47 @@
                             <path d="M26,11c0.6,0,1-0.4,1-1V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v7C25,10.6,25.4,11,26,11z" />
                         </g>
                     </svg>
-                    <span class="text-lg font-medium hover:text-shadow-lg/20">Mantenimiento</span>
+                    <span class="text-lg font-medium ">Mantenimiento</span>
                 </div>
                 <ul type="button" x-cloak x-collapse x-show="isExpanded" aria-labelledby="user-management-btn"
                     id="user-management">
                     <li class="px-1 py-0.5 first:mt-2">
                         <a href="/alergias" wire:navigate
-                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 hover:text-shadow-lg/20">Alergias</a>
+                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 ">Alergias</a>
                     </li>
                     <li class="px-1 py-0.5 first:mt-2">
                         <a href="/tipo-examenes" wire:navigate
-                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 hover:text-shadow-lg/20">Tipos de Examen</a>
+                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2 ">Tipos
+                            de Examen</a>
                     </li>
                     <li class="px-1 py-0.5 first:mt-2">
-                        <a href="#"
-                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2  hover:text-shadow-lg/20">ActivityLog</a>
+                        <a href="/tipo-consultas" wire:navigate
+                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2  ">Tipos
+                            de Consultas</a>
                     </li>
                 </ul>
+
+            </div>
+            <div class="flex flex-row items-center gap-2 hover:cursor-pointer" href="/expediente" wire:navigate>
+                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M17.25 23.25C20.5637 23.25 23.25 20.5637 23.25 17.25C23.25 13.9363 20.5637 11.25 17.25 11.25C13.9363 11.25 11.25 13.9363 11.25 17.25C11.25 20.5637 13.9363 23.25 17.25 23.25Z"
+                        stroke="#71717A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M17.25 14.25V20.25" stroke="#71717A" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M14.25 17.25H20.25" stroke="#71717A" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M3.75 6.75H14.25" stroke="#71717A" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M3.75 11.25H9.75" stroke="#71717A" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M3.75 15.75H7.5" stroke="#71717A" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path
+                        d="M7.5 20.25H2.25C1.85218 20.25 1.47064 20.092 1.18934 19.8107C0.908035 19.5294 0.75 19.1478 0.75 18.75V2.25C0.75 1.85218 0.908035 1.47064 1.18934 1.18934C1.47064 0.908035 1.85218 0.75 2.25 0.75H12.879C13.2765 0.750085 13.6578 0.907982 13.939 1.189L16.811 4.061C17.092 4.3422 17.2499 4.72345 17.25 5.121V7.58594"
+                        stroke="#71717A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="text-lg font-medium ">Expediente</span>
             </div>
         </div>
 
