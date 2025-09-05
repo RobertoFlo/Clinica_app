@@ -14,7 +14,7 @@ class MntPacienteAlergia extends Model
     protected $fillable = [
         'paciente_id',
         'alergia_id',
-        'nvl_alergia_id',
+        // 'nvl_alergia_id',
     ];
 
     public function paciente()
@@ -27,8 +27,8 @@ class MntPacienteAlergia extends Model
         return $this->belongsTo(CtlAlergia::class, 'alergia_id');
     }
 
-    public function nivel()
-    {
-        return $this->belongsTo(CtlNvlAlergia::class, 'nvl_alergia_id');
-    }
+    // public function nivel()
+    // {
+    //     return $this->belongsTo(CtlNvlAlergia::class, 'nvl_alergia_id');
+    // }
 }

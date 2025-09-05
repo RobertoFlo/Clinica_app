@@ -6,7 +6,7 @@ $acciones = collect(['editar', 'eliminar']);
 <div>
     <div class="">
         @livewire('components.titulo', ['titulo' => 'Alergias'])
-        <div class="w-full flex justify-end px-1 mb-6">
+        <div class="w-full flex justify-end mb-6">
             <!-- info Button with Icon -->
             <button type="button" wire:click="modalAlergia"
                 class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-blue-300 border border-blue-800 px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-info active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
@@ -26,54 +26,9 @@ $acciones = collect(['editar', 'eliminar']);
             'headers' => $headers,
             'acciones' => $acciones,
             ])
-            <div class="mt-4 flex flex-col items-center justify-center gap-2">
-                {{-- Paginación --}}
-                <nav aria-label="pagination">
-                    <ul class="flex shrink-0 items-center gap-2 text-sm font-medium">
-                        {{-- Previous --}}
-                        <li>
-                            <a href="#" wire:click.prevent="previousPage" @if($paginator->onFirstPage())
-                                aria-disabled="true"
-                                class="opacity-50 pointer-events-none" @endif
-                                class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary
-                                dark:text-on-surface-dark dark:hover:text-primary-dark"
-                                aria-label="previous page">
-                                {{-- ...icono... --}}
-                                Previous
-                            </a>
-                        </li>
-                        {{-- Page Numbers --}}
-                        @foreach ($paginator->getUrlRange(1, $paginator->lastPage()) as $page => $url)
-                        <li>
-                            <a href="#" wire:click.prevent="gotoPage({{ $page }})"
-                                class="flex size-6 items-center justify-center rounded-full p-1 border-none 
-                                {{ $paginator->currentPage() == $page ? 'bg-blue-400 border-sky-950 font-bold text-white' : 'text-on-surface hover:text-primary' }}"
-                                aria-current="{{ $paginator->currentPage() == $page ? 'page' : false }}"
-                                aria-label="page {{ $page }}">
-                                {{ $page }}
-                            </a>
-                        </li>
-                        @endforeach
-                        {{-- Next --}}
-                        <li>
-                            <a href="#" wire:click.prevent="nextPage" @if(!$paginator->hasMorePages())
-                                aria-disabled="true"
-                                class="opacity-50 pointer-events-none" @endif
-                                class="flex items-center rounded-radius p-1 text-on-surface hover:text-primary
-                                dark:text-on-surface-dark dark:hover:text-primary-dark"
-                                aria-label="next page">
-                                Next
-                                {{-- ...icono... --}}
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="text-xs text-gray-500 mt-2">
-                    {{-- Mostrar rango de resultados debajo del paginador --}}
-                    Showing {{ $paginator->firstItem() }} to {{ $paginator->lastItem() }} of {{ $paginator->total() }} results
-                </div>
+            <div class="mt-4 flex flex-col justify-center gap-2 px-2 w-full">
+                {{ $paginator->links() }}
             </div>
-
         </div>
 
         <div x-data="{ showModal: @entangle('showModal') }">

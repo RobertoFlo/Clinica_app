@@ -8,10 +8,12 @@ use App\Models\Paciente;
 use App\Models\MntExpediente;
 use App\Models\MntPacienteAlergia;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 
 class Registroexpediente extends Component
 {
+    public $id;
     public $nombre = '';
     public $apellido = '';
     public $telefono = '';
@@ -62,11 +64,9 @@ class Registroexpediente extends Component
         ];
     }
 
-
     #[On('item_tabla')]
-    public function seleccion_tabla($itemId, $accion)
+    public function seleccion_tabla($itemId)
     {
-
         if ($itemId) {
             $this->alergias_selected = collect($this->alergias_selected)
                 ->reject(function ($item) use ($itemId) {
@@ -79,6 +79,7 @@ class Registroexpediente extends Component
                 })
                 ->values()
                 ->all();
+            $this->resetErrorBag();
         } else {
             $this->dispatch('notify', [
                 'variant' => 'danger',
@@ -103,9 +104,9 @@ class Registroexpediente extends Component
                 'sexo' => $this->sexo,
             ]);
             // 2. Generar el número de expediente
-            $iniciales = strtoupper(substr($this->nombre, 0, 2) . substr($this->apellido, 0, 3));
+            $iniciales = strtoupper(substr($this->nombre, 0, 1) . substr($this->apellido, 0, 1));
             $anio = date('Y', strtotime($this->fecha_creacion));
-            $numeroExpediente =  $paciente->id . '-' . $iniciales . '-' . $anio;
+            $numeroExpediente =  $paciente->id . $iniciales . '-' . $anio;
             MntExpediente::create([
                 'paciente_id' => $paciente->id,
                 'fecha_creacion' => $this->fecha_creacion,
@@ -125,14 +126,13 @@ class Registroexpediente extends Component
                 'title' => '¡Éxito!',
                 'message' => 'Expediente y paciente registrados correctamente.'
             ]);
+            $this->dispatch('redirect-expediente');
         } catch (\Exception $e) {
             $this->dispatch('notify', [
                 'variant' => 'danger',
                 'title' => 'Error',
                 'message' => 'Hubo un error al registrar el usuario. Inténtalo de nuevo.'
             ]);
-        } finally {
-            $this->redirectRoute('expediente');
         }
     }
     public function agregarAlergia()
@@ -160,8 +160,60 @@ class Registroexpediente extends Component
         }
     }
 
+    public function mount($id = null)
+    {
+        $this->id = $id;
+        if ($this->id) {
+            $expediente = MntExpediente::withTrashed()->with('paciente')->find($this->id);
+            $alergiasPaciente = DB::table('mnt_persona_alergia as pa')
+                ->join('ctl_alergia as a', 'pa.alergia_id', '=', 'a.id')
+                ->select('pa.id as paciente_alergia_id', 'pa.paciente_id', 'a.id as alergia_id', 'a.nombre as alergia_nombre', 'pa.deleted_at')
+                ->where('pa.paciente_id', $expediente->paciente->id)
+                ->get()
+            ;
+            if ($expediente && $expediente->paciente) {
+                $this->nombre = $expediente->paciente->nombre;
+                $this->apellido = $expediente->paciente->apellido;
+                $this->telefono = $expediente->paciente->telefono;
+                $this->direccion = $expediente->paciente->direccion;
+                $this->documento_identidad = $expediente->paciente->documento_identidad;
+                $this->fecha_nacimiento = $expediente->paciente->fecha_nacimiento;
+                $this->sexo = $expediente->paciente->sexo;
+                $this->numero_expediente = $expediente->numero_expediente;
+                $this->fecha_creacion = $expediente->fecha_creacion;
+                // dd($alergiasPaciente);
+                $this->alergias_selected =collect($alergiasPaciente->map(function($item) {
+                    return (object)[
+                        'id' => $item->alergia_id,
+                        'nombre' => $item->alergia_nombre,
+                        'deleted_at' => $item->deleted_at,
+                    ];
+                }));
+            }
+        }
+    }
     public function render()
     {
+        //     if($this->id){
+        //         $expediente = MntExpediente::withTrashed()->with('paciente')->find($this->id);
+        //        // dd($expediente->paciente->id);
+
+        //         $alergiasPaciente =MntPacienteAlergia::withTrashed()->with('alergia')->where('paciente_id',$expediente->paciente->id)->get();
+        //         //dd($alergiasPaciente);
+        //         if($expediente && $alergiasPaciente){
+        //             $this->nombre = $expediente->paciente->nombre;
+        //             $this->apellido = $expediente->paciente->apellido;
+        //             $this->telefono = $expediente->paciente->telefono;
+        //             $this->direccion = $expediente->paciente->direccion;
+        //             $this->documento_identidad = $expediente->paciente->documento_identidad;
+        //             $this->fecha_nacimiento = $expediente->paciente->fecha_nacimiento;
+        //             $this->sexo = $expediente->paciente->sexo;
+        //             $this->numero_expediente = $expediente->numero_expediente;
+        //             $this->fecha_creacion = $expediente->fecha_creacion;
+        //             $this->alergias_selected = $alergiasPaciente;
+        //             //dd($alergiasPaciente);
+        //         }
+        //     }
         $this->alergias = CtlAlergia::withTrashed()->orderBy('id')->get();
         return view('livewire.pasiente.registroexpediente', [
             'alergias' => $this->alergias,

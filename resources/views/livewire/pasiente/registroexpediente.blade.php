@@ -51,7 +51,6 @@
                     </select>
                     @error('sexo') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
-
             </div>
             <hr>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -113,3 +112,12 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('redirect-expediente', () => {
+            setTimeout(() => {
+                window.location.href = "{{ route('expediente') }}";
+            }, 5000); // 5 segundos
+        });
+    });
+</script>

@@ -1,7 +1,7 @@
 <div>
     {{-- Because she competes with no one, no one can compete with her. --}}
     @livewire('components.titulo', ['titulo' => 'Tipos de Consultas'])
-     <div class="w-full flex justify-end px-1 mb-6">
+     <div class="w-full flex justify-end mb-6">
         <!-- info Button with Icon -->
         <button type="button" wire:click="modalConsulta"
             class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-blue-300 border border-blue-800 px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-info active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
