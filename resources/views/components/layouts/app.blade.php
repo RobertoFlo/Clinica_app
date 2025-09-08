@@ -10,7 +10,7 @@
     @vite(['resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100">
+<body class=" bg-gray-100" >
     @auth
         @livewire('components.navbar')
         @livewire('components.slidebar')
@@ -24,6 +24,9 @@
     </main>
     @livewireScripts
 </body>
+<style>
+
+</style>
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('redirect', (data) => {

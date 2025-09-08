@@ -1,6 +1,7 @@
 <div>
     <nav x-data="{ mobileMenuIsOpen: false }" x-on:click.away="mobileMenuIsOpen = false"
-        class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 shadow-lg " aria-label="penguin ui menu">
+        class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 shadow-lg "
+        aria-label="penguin ui menu">
         <!-- Brand Logo -->
         <a href="#" wire:click="menu"
             class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong ">
@@ -9,6 +10,7 @@
         <!-- Desktop Menu -->
         <ul class="hidden items-center gap-4 sm:flex  ">
             <!-- User Pic -->
+            @foreach ( $user as $item )
             <li x-data="{ userDropDownIsOpen: false, openWithKeyboard: false }"
                 x-on:keydown.esc.window="userDropDownIsOpen = false, openWithKeyboard = false"
                 class="relative flex items-center">
@@ -18,7 +20,7 @@
                     x-on:keydown.down.prevent="openWithKeyboard = true"
                     class="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary flex items-center gap-2"
                     aria-controls="userMenu">
-                    <span class="text-lg font-bold">nombre</span>
+                    <span class="text-lg font-bold">{{$item->name}}</span>
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-10 rounded-full object-cover" />
                 </button>
@@ -30,30 +32,28 @@
                     class="absolute right-0 top-12 flex w-fit min-w-48 flex-col overflow-hidden rounded-radius border border-outline bg-surface-alt py-1.5 bg-white">
                     <li class="">
                         <div class="flex flex-col px-4 py-2">
-                            <span class="text-sm font-medium text-on-surface-strong">Alice Brown</span>
-                            <p class="text-xs text-on-surface">alice.brown@gmail.com</p>
+                            <span class="text-sm font-medium text-on-surface-strong">{{$item->name}}</span>
+                            <p class="text-xs text-on-surface">{{$item->email}}</p>
                         </div>
                     </li>
-                    <li><a href="#"
-                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden">Dashboard</a>
+                    <li><a href="/" wire:navigate
+                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface ">Dashboard</a>
                     </li>
-                    <li><a href="#"
-                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden">Subscription</a>
-                    </li>
-                    <li><a href="#"
-                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden">Settings</a>
+                    <li><a href="#" class="block bg-surface-alt px-4 py-2 text-sm text-on-surface ">Settings</a>
                     </li>
                     <li>
                         <form action="{{ route('cierrar.session') }}" method="POST">
                             @csrf
                             <button type="submit"
-                                class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden hover:cursor-pointer">
+                                class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer">
                                 Sign Out
                             </button>
                         </form>
                     </li>
                 </ul>
             </li>
+            @endforeach
+
         </ul>
         <!-- Mobile Menu Button -->
         <button x-on:click="mobileMenuIsOpen = !mobileMenuIsOpen" x-bind:aria-expanded="mobileMenuIsOpen"
@@ -70,7 +70,8 @@
             </svg>
         </button>
         <!-- Mobile Menu -->
-        <ul x-cloak x-show="mobileMenuIsOpen"
+        <ul x-cloak x-show="mobileMenuIsOpen" 
+            @foreach ($user as $item)
             x-transition:enter="transition motion-reduce:transition-none ease-out duration-300"
             x-transition:enter-start="-translate-y-full" x-transition:enter-end="translate-y-0"
             x-transition:leave="transition motion-reduce:transition-none ease-out duration-300"
@@ -81,27 +82,26 @@
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-12 rounded-full object-cover" />
                     <div>
-                        <span class="font-medium text-on-surface-strong dark:text-on-surface-dark-strong">Alice
-                            Brown</span>
-                        <p class="text-sm text-on-surface dark:text-on-surface-dark">alice.brown@gmail.com</p>
+                        <span class="font-medium text-on-surface-strong dark:text-on-surface-dark-strong">{{$item->name}}</span>
+                        <p class="text-sm text-on-surface dark:text-on-surface-dark">{{$item->email}}</p>
                     </div>
                 </div>
             </li>
 
-            <li class="p-2"><a href="/dashboard" wire:navigate
-                    class="w-full text-on-surface focus:underline">Dashboard</a></li>
-            <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Subscription</a></li>
+            <li class="p-2"><a href="/" wire:navigate class="w-full text-on-surface focus:underline">Dashboard</a></li>
             <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Settings</a></li>
             <!-- CTA Button -->
             <li>
                 <form action="{{ route('cierrar.session') }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface hover:bg-surface-dark-alt/5 hover:text-on-surface-strong focus-visible:bg-surface-dark-alt/10 focus-visible:text-on-surface-strong focus-visible:outline-hidden hover:cursor-pointer">
+                        class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer">
                         Sign Out
                     </button>
                 </form>
             </li>
+            @endforeach
+
         </ul>
     </nav>
 

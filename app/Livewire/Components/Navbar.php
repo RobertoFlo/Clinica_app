@@ -11,6 +11,7 @@ class Navbar extends Component
     }
     public function render()
     {
-        return view('livewire.components.navbar');
+        $usuarios = \App\Models\User::all();
+        return view('livewire.components.navbar',['user'=> $usuarios]);
     }
 }

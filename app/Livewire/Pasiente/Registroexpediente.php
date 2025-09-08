@@ -10,6 +10,7 @@ use App\Models\MntPacienteAlergia;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
+use Carbon\Carbon;
 
 class Registroexpediente extends Component
 {
@@ -27,13 +28,12 @@ class Registroexpediente extends Component
     public $alergias = [];
     public $alergia_selected = [];
     public $alergias_selected = [];
-
     protected function rules()
     {
         return [
             'nombre' => 'required|string|min:3|max:150',
             'apellido' => 'required|string|min:3|max:150',
-            'telefono' => 'nullable|digits:8',
+            'telefono' => 'nullable|string|max:9|min:9',
             'direccion' => 'required|string|min:5|max:250',
             'documento_identidad' => 'nullable|string|max:10',
             'fecha_nacimiento' => 'nullable|date',
@@ -51,7 +51,9 @@ class Registroexpediente extends Component
             'apellido.required' => 'El apellido es obligatorio.',
             'apellido.min' => 'El apellido debe tener al menos 3 caracteres.',
             'apellido.max' => 'El apellido no puede tener más de 150 caracteres.',
-            'telefono.digits' => 'El teléfono debe tener 8 dígitos.',
+            'telefono.max' => 'El teléfono no puede tener más de 8 caracteres.',
+            'telefono.min' => 'El teléfono no puede tener menos de 8 caracteres.',
+            // 'telefono.string' => 'El teléfono debe tener 9 dígitos.',
             'direccion.required' => 'La dirección es requerida.',
             'direccion.min' => 'La dirección debe tener al menos 5 caracteres.',
             'direccion.max' => 'La dirección no puede tener más de 250 caracteres.',
@@ -68,18 +70,25 @@ class Registroexpediente extends Component
     public function seleccion_tabla($itemId)
     {
         if ($itemId) {
-            $this->alergias_selected = collect($this->alergias_selected)
-                ->reject(function ($item) use ($itemId) {
-                    // Si es modelo Eloquent
-                    if (is_object($item)) {
-                        return $item->id == $itemId;
-                    }
-                    // Si es array
-                    return isset($item['id']) && $item['id'] == $itemId;
-                })
-                ->values()
-                ->all();
-            $this->resetErrorBag();
+            if ($this->id) {
+                MntPacienteAlergia::where('paciente_id', $this->id)
+                    ->where('alergia_id', $itemId)
+                    ->forceDelete();
+                $this->recargaAlergia();
+            } else {
+                $this->alergias_selected = collect($this->alergias_selected)
+                    ->reject(function ($item) use ($itemId) {
+                        // Si es modelo Eloquent
+                        if (is_object($item)) {
+                            return $item->id == $itemId;
+                        }
+                        // Si es array
+                        return isset($item['id']) && $item['id'] == $itemId;
+                    })
+                    ->values()
+                    ->all();
+                $this->resetErrorBag();
+            }
         } else {
             $this->dispatch('notify', [
                 'variant' => 'danger',
@@ -94,38 +103,61 @@ class Registroexpediente extends Component
         $this->validate();
         $this->dispatch('show-loader');
         try {
-            $paciente = Paciente::create([
-                'nombre' => $this->nombre,
-                'apellido' => $this->apellido,
-                'telefono' => $this->telefono,
-                'direccion' => $this->direccion,
-                'documento_identidad' => $this->documento_identidad,
-                'fecha_nacimiento' => $this->fecha_nacimiento,
-                'sexo' => $this->sexo,
-            ]);
-            // 2. Generar el número de expediente
-            $iniciales = strtoupper(substr($this->nombre, 0, 1) . substr($this->apellido, 0, 1));
-            $anio = date('Y', strtotime($this->fecha_creacion));
-            $numeroExpediente =  $paciente->id . $iniciales . '-' . $anio;
-            MntExpediente::create([
-                'paciente_id' => $paciente->id,
-                'fecha_creacion' => $this->fecha_creacion,
-                'numero_expediente' => $numeroExpediente,
-            ]);
-            if (!empty($this->alergias_selected)) {
-                foreach ($this->alergias_selected as $item) {
-                    MntPacienteAlergia::create([
-                        'paciente_id' => $paciente->id,
-                        'alergia_id' => $item->id,
+            if ($this->id) {
+                $paciente  = Paciente::withTrashed()->find($this->id);
+                $paciente->update([
+                    'nombre' => $this->nombre,
+                    'apellido' => $this->apellido,
+                    'telefono' => $this->telefono,
+                    'direccion' => $this->direccion,
+                    'documento_identidad' => $this->documento_identidad,
+                    'fecha_nacimiento' => $this->fecha_nacimiento,
+                    'sexo' => $this->sexo,
+                ]);
+                $iniciales = strtoupper(substr($this->nombre, 0, 1) . substr($this->apellido, 0, 1));
+                $anio = date('Y', strtotime($this->fecha_creacion));
+                $numeroExpediente =  $paciente->id . $iniciales . '-' . $anio;
+                $expediente = MntExpediente::withTrashed()->where('paciente_id', $paciente->id)->first();
+                if ($expediente) {
+                    $expediente->update([
+                        'numero_expediente' => $numeroExpediente,
+                        'updated_at' => Carbon::now(),
                     ]);
                 }
+            } else {
+                $paciente = Paciente::create([
+                    'nombre' => $this->nombre,
+                    'apellido' => $this->apellido,
+                    'telefono' => $this->telefono,
+                    'direccion' => $this->direccion,
+                    'documento_identidad' => $this->documento_identidad,
+                    'fecha_nacimiento' => $this->fecha_nacimiento,
+                    'sexo' => $this->sexo,
+                ]);
+                // 2. Generar el número de expediente
+                $iniciales = strtoupper(substr($this->nombre, 0, 1) . substr($this->apellido, 0, 1));
+                $anio = date('Y', strtotime($this->fecha_creacion));
+                $numeroExpediente =  $paciente->id . $iniciales . '-' . $anio;
+                MntExpediente::create([
+                    'paciente_id' => $paciente->id,
+                    'fecha_creacion' => $this->fecha_creacion,
+                    'numero_expediente' => $numeroExpediente,
+                ]);
+                if (!empty($this->alergias_selected)) {
+                    foreach ($this->alergias_selected as $item) {
+                        MntPacienteAlergia::create([
+                            'paciente_id' => $paciente->id,
+                            'alergia_id' => $item->id,
+                        ]);
+                    }
+                }
+                $this->reset(['nombre', 'apellido', 'telefono', 'direccion', 'documento_identidad', 'fecha_nacimiento', 'sexo', 'numero_expediente', 'fecha_creacion']);
+                $this->dispatch('notify', [
+                    'variant' => 'success',
+                    'title' => '¡Éxito!',
+                    'message' => 'Expediente y paciente registrados correctamente.'
+                ]);
             }
-            $this->reset(['nombre', 'apellido', 'telefono', 'direccion', 'documento_identidad', 'fecha_nacimiento', 'sexo', 'numero_expediente', 'fecha_creacion']);
-            $this->dispatch('notify', [
-                'variant' => 'success',
-                'title' => '¡Éxito!',
-                'message' => 'Expediente y paciente registrados correctamente.'
-            ]);
             $this->dispatch('redirect-expediente');
         } catch (\Exception $e) {
             $this->dispatch('notify', [
@@ -146,9 +178,29 @@ class Registroexpediente extends Component
             ]
         );
         try {
-            $alergia = collect($this->alergias)->firstWhere('id', $this->alergia_selected);
-            if ($alergia && !collect($this->alergias_selected)->contains('id', $alergia->id)) {
-                $this->alergias_selected[] = $alergia;
+            if ($this->id) {
+                $existe = MntPacienteAlergia::where('paciente_id', $this->id)
+                    ->where('alergia_id', $this->alergia_selected)
+                    ->first();
+                if ($existe) {
+                    $this->dispatch('notify', [
+                        'variant' => 'warning',
+                        'title' => 'Atención',
+                        'message' => 'La alergia ya está asociada al paciente.'
+                    ]);
+                    return;
+                } else {
+                    MntPacienteAlergia::create([
+                        'paciente_id' => $this->id,
+                        'alergia_id' => $this->alergia_selected,
+                    ]);
+                    $this->recargaAlergia();
+                }
+            } else {
+                $alergia = collect($this->alergias)->firstWhere('id', $this->alergia_selected);
+                if ($alergia && !collect($this->alergias_selected)->contains('id', $alergia->id)) {
+                    $this->alergias_selected[] = $alergia;
+                }
             }
             $this->reset('alergia_selected');
         } catch (\Exception $e) {
@@ -159,18 +211,33 @@ class Registroexpediente extends Component
             ]);
         }
     }
+    public function recargaAlergia()
+    {
+        $alergiasPaciente = DB::table('mnt_persona_alergia as pa')
+            ->join('ctl_alergia as a', 'pa.alergia_id', '=', 'a.id')
+            ->select('pa.id as paciente_alergia_id', 'pa.paciente_id', 'a.id as alergia_id', 'a.nombre as alergia_nombre', 'pa.deleted_at')
+            ->where('pa.paciente_id', $this->id)
+            ->get();
+        $this->alergias_selected = collect($alergiasPaciente->map(function ($item) {
+            return (object)[
+                'id' => $item->alergia_id,
+                'nombre' => $item->alergia_nombre,
+                'deleted_at' => $item->deleted_at,
+            ];
+        }));
+    }
 
     public function mount($id = null)
     {
         $this->id = $id;
+        $this->fecha_creacion = Carbon::now()->format('Y-m-d');
         if ($this->id) {
             $expediente = MntExpediente::withTrashed()->with('paciente')->find($this->id);
             $alergiasPaciente = DB::table('mnt_persona_alergia as pa')
                 ->join('ctl_alergia as a', 'pa.alergia_id', '=', 'a.id')
                 ->select('pa.id as paciente_alergia_id', 'pa.paciente_id', 'a.id as alergia_id', 'a.nombre as alergia_nombre', 'pa.deleted_at')
                 ->where('pa.paciente_id', $expediente->paciente->id)
-                ->get()
-            ;
+                ->get();
             if ($expediente && $expediente->paciente) {
                 $this->nombre = $expediente->paciente->nombre;
                 $this->apellido = $expediente->paciente->apellido;
@@ -182,7 +249,7 @@ class Registroexpediente extends Component
                 $this->numero_expediente = $expediente->numero_expediente;
                 $this->fecha_creacion = $expediente->fecha_creacion;
                 // dd($alergiasPaciente);
-                $this->alergias_selected =collect($alergiasPaciente->map(function($item) {
+                $this->alergias_selected = collect($alergiasPaciente->map(function ($item) {
                     return (object)[
                         'id' => $item->alergia_id,
                         'nombre' => $item->alergia_nombre,
@@ -194,26 +261,6 @@ class Registroexpediente extends Component
     }
     public function render()
     {
-        //     if($this->id){
-        //         $expediente = MntExpediente::withTrashed()->with('paciente')->find($this->id);
-        //        // dd($expediente->paciente->id);
-
-        //         $alergiasPaciente =MntPacienteAlergia::withTrashed()->with('alergia')->where('paciente_id',$expediente->paciente->id)->get();
-        //         //dd($alergiasPaciente);
-        //         if($expediente && $alergiasPaciente){
-        //             $this->nombre = $expediente->paciente->nombre;
-        //             $this->apellido = $expediente->paciente->apellido;
-        //             $this->telefono = $expediente->paciente->telefono;
-        //             $this->direccion = $expediente->paciente->direccion;
-        //             $this->documento_identidad = $expediente->paciente->documento_identidad;
-        //             $this->fecha_nacimiento = $expediente->paciente->fecha_nacimiento;
-        //             $this->sexo = $expediente->paciente->sexo;
-        //             $this->numero_expediente = $expediente->numero_expediente;
-        //             $this->fecha_creacion = $expediente->fecha_creacion;
-        //             $this->alergias_selected = $alergiasPaciente;
-        //             //dd($alergiasPaciente);
-        //         }
-        //     }
         $this->alergias = CtlAlergia::withTrashed()->orderBy('id')->get();
         return view('livewire.pasiente.registroexpediente', [
             'alergias' => $this->alergias,

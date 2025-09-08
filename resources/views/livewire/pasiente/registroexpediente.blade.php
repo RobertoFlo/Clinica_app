@@ -1,7 +1,7 @@
 <div>
     {{-- Stop trying to control. --}}
     @livewire('components.titulo', ['titulo' => 'Registro de Expediente Médico'])
-    <div class="w-full max-w-3xl mx-auto">
+    <div class="w-full max-w-3xl mx-auto border border-gray-300 ">
 
         <form wire:submit="saveRegistro" class="space-y-4 bg-white p-6 rounded shadow">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Teléfono</label>
-                    <input type="text" wire:model="telefono" name="telefono"
+                    <input type="text" wire:model="telefono" name="telefono" placeholder="9999-9999" x-mask="9999-9999" 
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('telefono') border-red-500 @enderror">
                     @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -105,7 +105,9 @@
                     ])
                 </div>
             </div>
-            <div class="mt-6 flex justify-end">
+            <div class="mt-6 flex justify-between">
+                <button type="submit" href="/expediente" wire:navigate
+                    class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">Cancelar</button>
                 <button type="submit"
                     class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Guardar</button>
             </div>

@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'guard_name' => 'web',
         ]);
         $user = User::factory()->create([
-            'name' => 'Super_User',
+            'name' => 'Administrador',
             'email' => 'test@gmail.com',
             'password' => Hash::make('admin123')
         ]);

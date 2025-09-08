@@ -27,8 +27,4 @@ class MntPacienteAlergia extends Model
         return $this->belongsTo(CtlAlergia::class, 'alergia_id');
     }
 
-    // public function nivel()
-    // {
-    //     return $this->belongsTo(CtlNvlAlergia::class, 'nvl_alergia_id');
-    // }
 }

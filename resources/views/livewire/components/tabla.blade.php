@@ -1,4 +1,4 @@
-<div class=" w-full  overflow-x-auto">
+<div class=" w-full  overflow-x-auto shadow">
    <table class="min-w-full divide-y divide-gray-200 overflow-x-auto">
         <thead class="bg-gray-800">
             <tr>
@@ -16,9 +16,9 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @forelse ($datos as $data)
-                <tr class="hover:bg-blue-100 dark:hover:bg-neutral-100">
+                <tr class="hover:bg-blue-100">
                     @foreach ($fields as $field)
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ">
                             @if ($field === 'deleted_at')
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full  {{ data_get($data, $field) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
@@ -71,7 +71,7 @@
             @empty
                 <tr>
                     <td colspan="{{ count($headers) + (isset($acciones) && $acciones->count() > 0 ? 1 : 0) }}"
-                        class="px-6 py-4 text-center text-sm  dark:text-neutral-400">
+                        class="px-6 py-4 text-center text-sm ">
                         No hay registros
                     </td>
                 </tr>
