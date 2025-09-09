@@ -248,7 +248,6 @@ class Registroexpediente extends Component
                 $this->sexo = $expediente->paciente->sexo;
                 $this->numero_expediente = $expediente->numero_expediente;
                 $this->fecha_creacion = $expediente->fecha_creacion;
-                // dd($alergiasPaciente);
                 $this->alergias_selected = collect($alergiasPaciente->map(function ($item) {
                     return (object)[
                         'id' => $item->alergia_id,

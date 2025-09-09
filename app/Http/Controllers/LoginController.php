@@ -16,10 +16,11 @@ class LoginController extends Controller
         $user = $request->only(["email", "password"]);
       
             if (Auth::attempt($user)) {
-             $request->session()->regenerate(); 
+                $request->session()->regenerate(); 
+                return redirect()->intended('/'); 
+            }else{
 
-            // Redirige al usuario
-            return redirect()->intended('/'); 
+                return redirect()->intended('/login');
             }
         
     }
