@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('paciente_id');
             $table->date('fecha_creacion');
-            $table->bigInteger('numero_expediente')->unique();
+            $table->string('numero_expediente')->unique();
             $table->foreign('paciente_id')->references('id')->on('mnt_paciente');
             $table->timestamps();
             $table->softDeletes();

@@ -16,18 +16,25 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $adminRole = Role::firstOrCreate([
+        Role::firstOrCreate([
             'name' => 'administrador',
-            'guard_name' => 'sanctum',
+            'guard_name' => 'web',
+        ]);
+        Role::firstOrCreate([
+            'name' => 'usuario',
+            'guard_name' => 'web',
         ]);
         $user = User::factory()->create([
-            'name' => 'Super_User',
-            'email' => 'test@example.com',
+            'name' => 'Administrador',
+            'email' => 'test@gmail.com',
             'password' => Hash::make('admin123')
         ]);
         $user->assignRole('administrador');
         $this->call([
             carga::class,
+            CategoriaAlergiaSeeder::class,
+            TipoConsultaSeeder::class,
+            TipoExamenSeeder::class,
         ]);
     }
 }
