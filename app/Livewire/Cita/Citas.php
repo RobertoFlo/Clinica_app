@@ -33,7 +33,6 @@ class Citas extends Component
             case 'eliminar':
                 $this->showModal = true;
                 $this->seleccionado = Cita::withTrashed()->find($itemId);
-            9
                 if ($this->seleccionado['deleted_at']) {
                     $this->modalText = 'Pasara como aun no finalizada(Activa). ¿Desea continuar?';
                 } else {
@@ -69,24 +68,24 @@ class Citas extends Component
     {
         $this->showModal = false;
         try {
-            if ($this->seleccionado['deleted_at'] ) {
+            if ($this->seleccionado['deleted_at']) {
                 // Finalizar la cita (soft delete)
-               $item = Cita::withTrashed()->find( $this->seleccionado['id']);
-               $item->delete();
+                $item = Cita::withTrashed()->find($this->seleccionado['id']);
+                $item->delete();
                 // dd($item);
 
             } else {
                 // Reactivar la cita
-                $item = Cita::withTrashed()->find( $this->seleccionado['id']);
+                $item = Cita::withTrashed()->find($this->seleccionado['id']);
                 // dd($item);
                 $item->restore();
             }
             $this->dispatch('notify', [
-                    'variant' => 'success',
-                    'title' => '¡Éxito!',
-                    'message' => 'Cita reactivada correctamente.'
-                ]);
-        $this->reset('seleccionado');
+                'variant' => 'success',
+                'title' => '¡Éxito!',
+                'message' => 'Cita reactivada correctamente.'
+            ]);
+            $this->reset('seleccionado');
         } catch (\Exception $e) {
             $this->dispatch('notify', [
                 'variant' => 'danger',
@@ -146,7 +145,7 @@ class Citas extends Component
                 ->where('fecha_cita', $this->fecha_cita)
                 ->where('hora_cita', $this->hora_cita)
                 ->exists();
-            if ($citaExistente) {
+            if ($citaExistente == false) {
                 if ($this->modeedicion) {
                     DB::transaction(function () {
                         DB::table('mnt_cita')->where('id', $this->seleccionado['id'])->update([
@@ -180,7 +179,7 @@ class Citas extends Component
                     ]);
                 }
 
-                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado');
+                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modeedicion');
             } else {
                 $this->dispatch('notify', [
                     'variant' => 'danger',
@@ -192,7 +191,7 @@ class Citas extends Component
             $this->dispatch('notify', [
                 'variant' => 'danger',
                 'title' => 'Error',
-                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.'
+                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.' . ($e->getMessage()),
             ]);
         }
     }

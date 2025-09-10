@@ -3,8 +3,8 @@
         class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 shadow-lg "
         aria-label="penguin ui menu">
         <!-- Brand Logo -->
-        <a href="#" wire:click="menu"
-            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong ">
+        <a  wire:click="$dispatch('despligue')"
+            class="text-2xl font-bold text-on-surface-strong dark:text-on-surface-dark-strong  hover:cursor-pointer">
             <span>Clinica</span>
         </a>
         <!-- Desktop Menu -->
