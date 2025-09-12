@@ -29,14 +29,14 @@
                                     @foreach ($field as $parent => $children)
                                         @if (is_array($children))
                                             @foreach ($children as $child)
-                                                {{ data_get($data, "$parent.$child") }}
+                                                {{ formatValue(data_get($data, "$parent.$child")) }}
                                             @endforeach
                                         @else
-                                            {{ data_get($data, "$parent.$children") }}
+                                            {{ formatValue(data_get($data, "$parent.$children")) }}
                                         @endif
                                     @endforeach
                                 @else
-                                    {{ data_get($data, $field) }}
+                                    {{ formatValue(data_get($data, $field)) }}
                                 @endif
                             @endif
                         </td>

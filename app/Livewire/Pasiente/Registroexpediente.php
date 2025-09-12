@@ -11,9 +11,10 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Carbon\Carbon;
-
+use Livewire\Attributes\Locked;
 class Registroexpediente extends Component
 {
+    #[Locked] 
     public $id;
     public $nombre = '';
     public $apellido = '';

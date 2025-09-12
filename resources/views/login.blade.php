@@ -19,10 +19,10 @@
   @endif
 </head>
 
-<body class="bg-gray-900">
+<body class="bg-blue-900">
   <div class="flex h-screen justify-center items-center">
     <div
-      class=" bg-amber-50 rounded-2xl lg:w-5/12 xl:w-4/12  md:w-6/12 sm:w-8/12 w-full m-4 px-6 py-12 lg:px-8  shadow-lg shadow-white border-2 border-gray-400">
+      class=" bg-white rounded-2xl lg:w-5/12 xl:w-4/12  md:w-6/12 sm:w-8/12 w-full m-4 px-6 py-12 lg:px-8  shadow-lg  border-2 border-gray-400">
       <form action="{{ route('inicio.session') }}" method="POST" class="flex flex-col w-full justify-center items-center gap-4">
         @csrf
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
