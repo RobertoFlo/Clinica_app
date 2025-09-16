@@ -1,5 +1,5 @@
 <div class=" w-full  overflow-x-auto shadow">
-   <table class="min-w-full divide-y divide-gray-200 overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 overflow-x-auto">
         <thead class="bg-gray-800">
             <tr>
                 @foreach ($headers as $header)
@@ -26,15 +26,19 @@
                                 </span>
                             @else
                                 @if (is_array($field))
-                                    @foreach ($field as $parent => $children)
-                                        @if (is_array($children))
-                                            @foreach ($children as $child)
-                                                {{ formatValue(data_get($data, "$parent.$child")) }}
-                                            @endforeach
-                                        @else
-                                            {{ formatValue(data_get($data, "$parent.$children")) }}
-                                        @endif
-                                    @endforeach
+                                    @if (array_is_list($field))
+                                        {{ collect($field)->map(fn($f) => formatValue(data_get($data, $f)))->implode(' ') }}
+                                    @else
+                                        @foreach ($field as $parent => $children)
+                                            @if (is_array($children))
+                                                @foreach ($children as $child)
+                                                    {{ formatValue(data_get($data, "$parent.$child")) }}
+                                                @endforeach
+                                            @else
+                                                {{ formatValue(data_get($data, "$parent.$children")) }}
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 @else
                                     {{ formatValue(data_get($data, $field)) }}
                                 @endif

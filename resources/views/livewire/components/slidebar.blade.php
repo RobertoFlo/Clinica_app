@@ -66,6 +66,10 @@
                             class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2  ">Tipos
                             de Consultas</a>
                     </li>
+                    <li class="px-1 py-0.5 first:mt-2">
+                        <a href="/medicos" wire:navigate
+                            class="flex items-center rounded-sm gap-2 px-2 py-1.5 text-md  underline-offset-2  ">Médicos</a>
+                    </li>
                 </ul>
 
             </div>

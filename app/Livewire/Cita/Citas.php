@@ -19,7 +19,7 @@ class Citas extends Component
     public $hora_cita = '';
     public $nombre_paciente = '';
     public $fecha_cita = '';
-    public $seleccionado = '';
+    public $seleccionado = [];
     public $modo_edicion = false;
     public $modal_text = '';
     public $showModal = false;
@@ -125,17 +125,17 @@ class Citas extends Component
         $this->validate([
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
-            'nombre_paciente' => 'required|string|max:100,min:5',
+            'nombre_paciente' => 'required|string|max:100|min:5',
         ], [
             'fecha_cita.required' => 'La fecha de la cita es obligatoria.',
             'fecha_cita.date' => 'La fecha de la cita debe ser una fecha válida.',
             'fecha_cita.after_or_equal' => 'La fecha de la cita no puede ser anterior a hoy.',
             'hora_cita.required' => 'La hora de la cita es obligatoria.',
             'hora_cita.date_format' => 'La hora de la cita debe tener el formato HH:MM.',
-            'nombre_paciente.required' => 'El nombre del paciente es obligatorio.',
             'nombre_paciente.string' => 'El nombre del paciente debe ser una cadena de texto.',
             'nombre_paciente.max' => 'El nombre del paciente no puede tener más de 100 caracteres.',
             'nombre_paciente.min' => 'El nombre del paciente debe tener al menos 5 caracteres.',
+            'nombre_paciente.required' => 'Debe seleccionar un paciente de la lista o crear su registro.',
         ]);
         try {
             $citaExistente = DB::table('mnt_cita')
@@ -188,7 +188,7 @@ class Citas extends Component
             $this->dispatch('notify', [
                 'variant' => 'danger',
                 'title' => 'Error',
-                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.',
+                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.'.$e,
             ]);
         }
     }
@@ -203,6 +203,10 @@ class Citas extends Component
             'search_cita.max' => 'La búsqueda no puede tener más de 100 caracteres.',
             'fecha_cita_search.date' => 'La fecha de la cita debe ser una fecha válida.',
         ]);
+    }
+    public function Paciente(){
+        session(['previous_url' => url()->previous()]);
+        $this->redirect('registro-expediente');
     }
     public function limpiarBusqueda()
     {

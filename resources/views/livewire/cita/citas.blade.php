@@ -43,18 +43,30 @@
         <div class="lg:w-3/6 w-full">
             <h2 class="text-2xl text-center mt-2">Formulario</h3>
                 <div class="p-4">
-                    <label for="paciente" class="block text-sm font-medium text-gray-700">Paciente</label>
+                    <label for="paciente" class="block font-medium text-xl">Pacientes</label>
                     <input type="text" wire:model="paciente" placeholder="Buscar paciente por nombre o documento"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 @error('paciente') !border-red-600 @enderror" />
                     @error('paciente') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                    <button wire:click="buscarPaciente"
-                        class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:cursor-pointer">
-                        Buscar
-                    </button>
-                    <button wire:click="LimpiarPaciente"
-                        class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hover:cursor-pointer">
-                        Limpiar
-                    </button>
+                    <div class="flex sm:justify-between flex-col sm:flex-row">
+                        <div>
+                            <button wire:click="buscarPaciente"
+                                class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:cursor-pointer">
+                                Buscar
+                            </button>
+                            <button wire:click="LimpiarPaciente"
+                                class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hover:cursor-pointer">
+                                Limpiar
+                            </button>
+                        </div>
+                        <div>
+                            <button wire:click="Paciente"
+                                class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:cursor-pointer">
+                                Crear Paciente
+                            </button>
+                        </div>
+
+                    </div>
+
                     <div class="mt-4 h-[125px] overflow-y-auto">
                         @if ($pacientes)
                         <ul class="divide-y divide-gray-200 overflow-y-auto">
@@ -95,7 +107,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium">Nombre</label>
-                        <input type="text" wire:model="nombre_paciente" name="nombre"
+                        <input type="text" wire:model="nombre_paciente" name="nombre" disabled
                             class="mt-1 block w-full border border-gray-300 rounded p-2 @error('nombre_paciente') border-red-500 @enderror">
                         @error('nombre_paciente') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     </div>

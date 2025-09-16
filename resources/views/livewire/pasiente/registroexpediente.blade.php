@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Teléfono</label>
-                    <input type="text" wire:model="telefono" name="telefono" placeholder="9999-9999" x-mask="9999-9999" 
+                    <input type="text" wire:model="telefono" name="telefono" placeholder="9999-9999" x-mask="9999-9999"
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('telefono') border-red-500 @enderror">
                     @error('telefono') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Documento Identidad</label>
-                    <input type="text" wire:model="documento_identidad" name="documento_identidad"
+                    <input type="text" wire:model="documento_identidad" name="documento_identidad" placeholder="00000000-0" x-mask="00000000-0"
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('documento_identidad') border-red-500 @enderror">
                     @error('documento_identidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -83,7 +83,7 @@
                     <div class="w-full flex mt-6 justify-end ">
                         <!-- info Button with Icon -->
                         <button type="button" wire:click="agregarAlergia"
-                            class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-green-300 border border-green-800 px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-info active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed">
+                            class="inline-flex items-center px-4 py-2 bg-green-600 gap-1 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
                             Agregar
                             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                 class="size-5 fill-on-info dark:fill-on-info" fill="currentColor">
@@ -106,10 +106,15 @@
                 </div>
             </div>
             <div class="mt-6 flex justify-between">
-                <button type="submit" href="/expediente" wire:navigate
-                    class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">Cancelar</button>
+                <button type="submit" wire:click="goBack"
+                    class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 ">Cancelar
+                    </button>
                 <button type="submit"
-                    class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Guardar</button>
+                    class="bg-blue-600 text-white px-6 py-2 gap-1 rounded hover:bg-blue-700 flex items-center justify-center">Guardar
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                </button>
             </div>
         </form>
     </div>
