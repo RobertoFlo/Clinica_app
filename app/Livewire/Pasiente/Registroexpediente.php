@@ -11,9 +11,10 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Carbon\Carbon;
-
+use Livewire\Attributes\Locked;
 class Registroexpediente extends Component
 {
+    #[Locked] 
     public $id;
     public $nombre = '';
     public $apellido = '';
@@ -53,7 +54,7 @@ class Registroexpediente extends Component
             'apellido.max' => 'El apellido no puede tener más de 150 caracteres.',
             'telefono.max' => 'El teléfono no puede tener más de 8 caracteres.',
             'telefono.min' => 'El teléfono no puede tener menos de 8 caracteres.',
-            // 'telefono.string' => 'El teléfono debe tener 9 dígitos.',
+            'telefono.string' => 'El teléfono debe tener 9 dígitos.',
             'direccion.required' => 'La dirección es requerida.',
             'direccion.min' => 'La dirección debe tener al menos 5 caracteres.',
             'direccion.max' => 'La dirección no puede tener más de 250 caracteres.',
@@ -226,7 +227,10 @@ class Registroexpediente extends Component
             ];
         }));
     }
-
+    public function goBack()
+    {
+        return redirect()->to(session('previous_url'));
+    }
     public function mount($id = null)
     {
         $this->id = $id;

@@ -18,6 +18,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/expediente', App\Livewire\Pasiente\Expediente::class)->name('expediente');
     Route::get('/registro-expediente/{id?}', App\Livewire\Pasiente\Registroexpediente::class)->name('registro.expediente');
     Route::get('/citas', App\Livewire\Cita\Citas::class);
+    Route::get('/medicos', App\Livewire\Medicos\Doctores::class);
 
 });
 

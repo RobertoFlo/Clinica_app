@@ -8,6 +8,7 @@ use App\Models\Cita;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
+use Carbon\Carbon;
 
 class Citas extends Component
 {
@@ -18,11 +19,13 @@ class Citas extends Component
     public $hora_cita = '';
     public $nombre_paciente = '';
     public $fecha_cita = '';
-    public $seleccionado = '';
-    public $modeedicion = false;
-    public $modalText = '';
+    public $seleccionado = [];
+    public $modo_edicion = false;
+    public $modal_text = '';
     public $showModal = false;
     public $modalForce = false;
+    public $search_cita;
+    public $fecha_cita_search = '';
 
 
 
@@ -34,23 +37,22 @@ class Citas extends Component
                 $this->showModal = true;
                 $this->seleccionado = Cita::withTrashed()->find($itemId);
                 if ($this->seleccionado['deleted_at']) {
-                    $this->modalText = 'Pasara como aun no finalizada(Activa). ¿Desea continuar?';
+                    $this->modal_text = 'Pasara como aun no finalizada(Activa). ¿Desea continuar?';
                 } else {
-                    $this->modalText = 'Se dara como finalizada la cita. ¿Desea continuar?';
+                    $this->modal_text = 'Se dara como finalizada la cita. ¿Desea continuar?';
                 }
                 break;
             case 'editar':
-                $this->modeedicion = true;
+                $this->modo_edicion = true;
                 $this->seleccionado = Cita::withTrashed()->find($itemId);
                 $this->fecha_cita = $this->seleccionado['fecha_cita'];
-                $this->hora_cita = $this->seleccionado['hora_cita'];
+                $this->hora_cita = Carbon::parse($this->seleccionado['hora_cita'])->format('H:i');
                 $this->nombre_paciente = $this->seleccionado['nombre_paciente'];
                 break;
             case 'destroy':
                 // Cita::where('id', $itemId)->forceDelete();
                 break;
             default:
-                // Acción no reconocida
                 $this->dispatch('notify', [
                     'variant' => 'danger',
                     'title' => 'Error',
@@ -69,16 +71,12 @@ class Citas extends Component
         $this->showModal = false;
         try {
             if ($this->seleccionado['deleted_at']) {
-                // Finalizar la cita (soft delete)
+
+                $item = Cita::withTrashed()->find($this->seleccionado['id']);
+                $item->restore();
+            } else {
                 $item = Cita::withTrashed()->find($this->seleccionado['id']);
                 $item->delete();
-                // dd($item);
-
-            } else {
-                // Reactivar la cita
-                $item = Cita::withTrashed()->find($this->seleccionado['id']);
-                // dd($item);
-                $item->restore();
             }
             $this->dispatch('notify', [
                 'variant' => 'success',
@@ -127,18 +125,17 @@ class Citas extends Component
         $this->validate([
             'fecha_cita' => 'required|date|after_or_equal:today',
             'hora_cita' => 'required|date_format:H:i',
-            'nombre_paciente' => 'required|string|max:100,min:5',
+            'nombre_paciente' => 'required|string|max:100|min:5',
         ], [
             'fecha_cita.required' => 'La fecha de la cita es obligatoria.',
             'fecha_cita.date' => 'La fecha de la cita debe ser una fecha válida.',
             'fecha_cita.after_or_equal' => 'La fecha de la cita no puede ser anterior a hoy.',
             'hora_cita.required' => 'La hora de la cita es obligatoria.',
             'hora_cita.date_format' => 'La hora de la cita debe tener el formato HH:MM.',
-            'nombre_paciente.required' => 'El nombre del paciente es obligatorio.',
             'nombre_paciente.string' => 'El nombre del paciente debe ser una cadena de texto.',
             'nombre_paciente.max' => 'El nombre del paciente no puede tener más de 100 caracteres.',
             'nombre_paciente.min' => 'El nombre del paciente debe tener al menos 5 caracteres.',
-
+            'nombre_paciente.required' => 'Debe seleccionar un paciente de la lista o crear su registro.',
         ]);
         try {
             $citaExistente = DB::table('mnt_cita')
@@ -146,10 +143,10 @@ class Citas extends Component
                 ->where('hora_cita', $this->hora_cita)
                 ->exists();
             if ($citaExistente == false) {
-                if ($this->modeedicion) {
+                if ($this->modo_edicion) {
+
                     DB::transaction(function () {
                         DB::table('mnt_cita')->where('id', $this->seleccionado['id'])->update([
-                            'paciente_id' => $this->seleccionado['id'],
                             'fecha_cita' => $this->fecha_cita,
                             'hora_cita' => $this->hora_cita,
                             'nombre_paciente' => $this->nombre_paciente,
@@ -164,7 +161,7 @@ class Citas extends Component
                 } else {
                     DB::transaction(function () {
                         DB::table('mnt_cita')->insert([
-                            'paciente_id' => $this->seleccionado['id'],
+                            'paciente_id' => $this->seleccionado['id'] ?? null,
                             'fecha_cita' => $this->fecha_cita,
                             'hora_cita' => $this->hora_cita,
                             'nombre_paciente' => $this->nombre_paciente,
@@ -178,8 +175,8 @@ class Citas extends Component
                         'message' => 'Cita agendada correctamente.'
                     ]);
                 }
-
-                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modeedicion');
+                $this->dispatch('show-loader');
+                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion');
             } else {
                 $this->dispatch('notify', [
                     'variant' => 'danger',
@@ -191,13 +188,48 @@ class Citas extends Component
             $this->dispatch('notify', [
                 'variant' => 'danger',
                 'title' => 'Error',
-                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.' . ($e->getMessage()),
+                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.'.$e,
             ]);
         }
     }
+    public function buscarCitas()
+    {
+        $this->dispatch('show-loader');
+        $this->validate([
+            'fecha_cita_search' => 'nullable|date:regex:/^[\p{L}]+$/u',
+            'search_cita' => 'nullable|string|max:100',
+        ], [
+            'search_cita.string' => 'La búsqueda debe ser un texto.',
+            'search_cita.max' => 'La búsqueda no puede tener más de 100 caracteres.',
+            'fecha_cita_search.date' => 'La fecha de la cita debe ser una fecha válida.',
+        ]);
+    }
+    public function Paciente(){
+        session(['previous_url' => url()->previous()]);
+        $this->redirect('registro-expediente');
+    }
+    public function limpiarBusqueda()
+    {
+        $this->dispatch('show-loader');
+        $this->reset('search_cita', 'fecha_cita_search');
+    }
+    public function LimpiarFormulario()
+    {
+        $this->resetErrorBag();
+        $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion');
+    }
     public function render()
     {
-        $paginator = Cita::withTrashed()->orderBy('id')->paginate(10);
+        $query = Cita::withTrashed()->orderBy('fecha_cita', 'desc')->orderBy('hora_cita', 'desc');
+
+        if ($this->search_cita) {
+            $query->where('nombre_paciente', 'like', '%' . $this->search_cita . '%');
+        }
+        if ($this->fecha_cita_search) {
+            $query->where('fecha_cita', $this->fecha_cita_search);
+        }
+
+        $paginator = $query->paginate(6);
         return view('livewire.cita.citas', [
             'pacientes' => $this->pacientes,
             'paginator' => $paginator,

@@ -1,6 +1,6 @@
 <div>
     <nav x-data="{ mobileMenuIsOpen: false }" x-on:click.away="mobileMenuIsOpen = false"
-        class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 shadow-lg "
+        class="flex items-center justify-between px-6 py-4 bg-blue-800 border-b border-gray-100 shadow-lg text-white"
         aria-label="penguin ui menu">
         <!-- Brand Logo -->
         <a  wire:click="$dispatch('despligue')"

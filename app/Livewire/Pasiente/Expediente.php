@@ -24,8 +24,9 @@ class Expediente extends Component
              $this->modalText = $this->item['deleted_at'] ? "restaurar" : "desactivara";
              $this->openModal();
             break;
-            case 'editar':            
-            $this->redirect(route('registro.expediente',['id' =>$this->item['id']]),true);
+            case 'editar':  
+                session(['previous_url' => url()->previous()]);
+                $this->redirect(route('registro.expediente',['id' =>$this->item['id']]),true);
             break;
             default:
                 $this->dispatch('notify', [
@@ -36,6 +37,11 @@ class Expediente extends Component
                 break;
         }
        
+    }
+    public function crear()
+    {
+        session(['previous_url' => url()->previous()]);
+        $this->redirect('registro-expediente');
     }
     public function openModal()
     {
