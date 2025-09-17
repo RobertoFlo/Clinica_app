@@ -12,37 +12,39 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Carbon\Carbon;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Validate;
 class Registroexpediente extends Component
 {
     #[Locked] 
     public $id;
+
+    #[Validate('required|string|min:3|max:150')]
     public $nombre = '';
+    
+    #[Validate('required|string|min:3|max:150')]
     public $apellido = '';
+
+    #[Validate('nullable|string|max:9|min:9')]
     public $telefono = '';
+    
+    #[Validate('required|string|min:5|max:250')]
     public $direccion = '';
+
+    #[Validate('nullable|string|max:10')]
     public $documento_identidad = '';
+
+    #[Validate('nullable|date')]
     public $fecha_nacimiento = '';
+
+    #[Validate('required|string|in:M,F')]
     public $sexo = '';
     public $numero_expediente = '';
+    #[Validate('required|date')]
     public $fecha_creacion = '';
-    //gestion de alergias
     public $alergias = [];
     public $alergia_selected = [];
-    public $alergias_selected = [];
-    protected function rules()
-    {
-        return [
-            'nombre' => 'required|string|min:3|max:150',
-            'apellido' => 'required|string|min:3|max:150',
-            'telefono' => 'nullable|string|max:9|min:9',
-            'direccion' => 'required|string|min:5|max:250',
-            'documento_identidad' => 'nullable|string|max:10',
-            'fecha_nacimiento' => 'nullable|date',
-            'sexo' => ['required', Rule::in(['M', 'F'])],
-            'fecha_creacion' => 'required|date',
-        ];
-    }
-
+    public $alergias_selected = []; 
+    
     protected function messages()
     {
         return [

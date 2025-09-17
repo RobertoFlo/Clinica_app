@@ -3,7 +3,6 @@
 namespace App\Livewire\Consultas;
 
 use App\Models\CtlTipoConsulta;
-use App\Models\CtlTipoExamen;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;

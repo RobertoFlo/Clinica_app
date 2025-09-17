@@ -3,7 +3,7 @@
 namespace App\Livewire\Pasiente;
 
 use Livewire\Component;
-use App\Models\MntExpediente;   
+use App\Models\MntExpediente;
 use Livewire\Attributes\On;
 
 class Expediente extends Component
@@ -21,13 +21,13 @@ class Expediente extends Component
         $this->seleccion = $accion;
         switch ($this->seleccion) {
             case 'eliminar':
-             $this->modalText = $this->item['deleted_at'] ? "restaurar" : "desactivara";
-             $this->openModal();
-            break;
-            case 'editar':  
+                $this->modalText = $this->item['deleted_at'] ? "restaurar" : "desactivara";
+                $this->openModal();
+                break;
+            case 'editar':
                 session(['previous_url' => url()->previous()]);
-                $this->redirect(route('registro.expediente',['id' =>$this->item['id']]),true);
-            break;
+                $this->redirect(route('registro.expediente', ['id' => $this->item['id']]), true);
+                break;
             default:
                 $this->dispatch('notify', [
                     'variant' => 'danger',
@@ -36,7 +36,6 @@ class Expediente extends Component
                 ]);
                 break;
         }
-       
     }
     public function crear()
     {
@@ -52,7 +51,7 @@ class Expediente extends Component
         $this->showModal = false;
     }
 
- 
+
     public function eliminar()
     {
         $registro = MntExpediente::withTrashed()->find($this->item['id']);
@@ -63,7 +62,7 @@ class Expediente extends Component
             $registro->delete();
         }
         $this->dispatch('notify', [
-            'variant' => $registro->deleted_at? 'danger':'success',
+            'variant' => $registro->deleted_at ? 'danger' : 'success',
             'title' => '¡Éxito!',
             'message' => $registro->deleted_at ? 'Expediente desactivado correctamente.' : 'Expediente restaurado correctamente.'
         ]);
@@ -72,7 +71,7 @@ class Expediente extends Component
     public function render()
     {
         $paginator = MntExpediente::withTrashed()->orderBy('id')->with('paciente')->paginate(10);
-        
-        return view('livewire.pasiente.expediente', ['paginator'=> $paginator,'datos'=>collect($paginator->items())->map->toArray()->all(),]); 
+
+        return view('livewire.pasiente.expediente', ['paginator' => $paginator, 'datos' => collect($paginator->items())->map->toArray()->all(),]);
     }
 }

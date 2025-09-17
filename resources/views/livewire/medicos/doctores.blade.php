@@ -30,11 +30,29 @@
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95"
-                    class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3/6">
+                    class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2/6">
                     <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <div class="mt-2 space-y-4">
-                                <h1>Agregar Médico</h1>
+                                <h1 class="text-2xl text-center">Agregar Médico</h1>
+                                <div>
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" id="nombre" wire:model="nombre"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 @error('nombre') !border-red-600 @enderror">
+                                    @error('nombre') <span class="text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label for="apellido">Apellido</label>
+                                    <input type="text" id="apellido" wire:model="apellido"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 @error('apellido') !border-red-600 @enderror">
+                                    @error('apellido') <span class="text-red-500">{{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <label for="especialidad">Especialidad</label>
+                                    <input type="text" id="especialidad" wire:model="especialidad"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 @error('especialidad') !border-red-600 @enderror">
+                                    @error('especialidad') <span class="text-red-500">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
