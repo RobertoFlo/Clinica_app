@@ -32,20 +32,20 @@
                     class="absolute right-0 top-12 flex w-fit min-w-48 flex-col overflow-hidden rounded-radius border border-outline bg-surface-alt py-1.5 bg-white">
                     <li class="">
                         <div class="flex flex-col px-4 py-2">
-                            <span class="text-sm font-medium text-on-surface-strong">{{$item->name}}</span>
-                            <p class="text-xs text-on-surface">{{$item->email}}</p>
+                            <span class="text-sm font-medium text-on-surface-strong text-black">{{$item->name}}</span>
+                            <p class="text-xs text-on-surface text-black">{{$item->email}}</p>
                         </div>
                     </li>
                     <li><a href="/" wire:navigate
-                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface ">Dashboard</a>
+                            class="block bg-surface-alt px-4 py-2 text-sm text-on-surface text-black">Dashboard</a>
                     </li>
-                    <li><a href="#" class="block bg-surface-alt px-4 py-2 text-sm text-on-surface ">Settings</a>
+                    <li><a href="#" class="block bg-surface-alt px-4 py-2 text-sm text-on-surface text-black">Settings</a>
                     </li>
                     <li>
                         <form action="{{ route('cierrar.session') }}" method="POST">
                             @csrf
                             <button type="submit"
-                                class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer">
+                                class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer text-black">
                                 Sign Out
                             </button>
                         </form>
@@ -82,20 +82,20 @@
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-12 rounded-full object-cover" />
                     <div>
-                        <span class="font-medium text-on-surface-strong dark:text-on-surface-dark-strong">{{$item->name}}</span>
-                        <p class="text-sm text-on-surface dark:text-on-surface-dark">{{$item->email}}</p>
+                        <span class="font-medium text-on-surface-strong  text-black">{{$item->name}}</span>
+                        <p class="text-sm text-on-surface  text-black">{{$item->email}}</p>
                     </div>
                 </div>
             </li>
 
-            <li class="p-2"><a href="/" wire:navigate class="w-full text-on-surface focus:underline">Dashboard</a></li>
-            <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline">Settings</a></li>
+            <li class="p-2"><a href="/" wire:navigate class="w-full text-on-surface focus:underline text-black">Dashboard</a></li>
+            <li class="p-2"><a href="#" class="w-full text-on-surface focus:underline text-black">Settings</a></li>
             <!-- CTA Button -->
             <li>
                 <form action="{{ route('cierrar.session') }}" method="POST">
                     @csrf
                     <button type="submit"
-                        class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer">
+                        class="block w-full text-left bg-surface-alt px-4 py-2 text-sm text-on-surface  hover:cursor-pointer text-black">
                         Sign Out
                     </button>
                 </form>

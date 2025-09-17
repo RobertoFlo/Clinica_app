@@ -74,8 +74,8 @@ class Citas extends Component
     {
         $this->showModal = false;
         try {
+            $this->dispatch('show-loader');
             if ($this->seleccionado['deleted_at']) {
-
                 $item = Cita::withTrashed()->find($this->seleccionado['id']);
                 $item->restore();
             } else {
@@ -128,6 +128,7 @@ class Citas extends Component
     public function agendarCita()
     {
         $this->validate();
+        $this->dispatch('show-loader');
         try {
             $citaExistente = DB::table('mnt_cita')
                 ->where('fecha_cita', $this->fecha_cita)

@@ -116,6 +116,7 @@ class Examen extends Component
     }
     public function eliminar()
     {
+        $this->dispatch('show-loader');
         $examen = CtlTipoExamen::withTrashed()->find($this->item['id']);
         if ($examen->deleted_at) {
             $examen->deleted_at = null;

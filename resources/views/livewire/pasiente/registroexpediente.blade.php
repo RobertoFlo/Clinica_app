@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Documento Identidad</label>
-                    <input type="text" wire:model="documento_identidad" name="documento_identidad" placeholder="00000000-0" x-mask="00000000-0"
+                    <input type="text" wire:model="documento_identidad" name="documento_identidad" placeholder="99999999-9" x-mask="99999999-9"
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('documento_identidad') border-red-500 @enderror">
                     @error('documento_identidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>

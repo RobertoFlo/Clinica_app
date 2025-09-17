@@ -7,7 +7,7 @@
             x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"
             x-transition:leave-start="translate-x-0 opacity-100"
             class="pointer-events-auto relative rounded-xl text-on-surface
-                                                            @if($notification['variant'] === 'success') border-green-300 bg-green-400/50 @endif
+                                                            @if($notification['variant'] === 'success') border-green-300 bg-green-400/80 @endif
                                                             @if($notification['variant'] === 'danger') border-red-400 bg-red-400/80 @endif
                                                             @if($notification['variant'] === 'info') border-blue-400 bg-blue-400/80 @endif
                                                             @if($notification['variant'] === 'warning') border-yellow-400 bg-yellow-400/80 @endif " role="alert">

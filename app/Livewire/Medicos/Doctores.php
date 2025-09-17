@@ -57,6 +57,7 @@ class Doctores extends Component
     public function saveMedico()
     {
         $this->validate();
+        $this->dispatch('show-loader');
         try {
             if ($this->seleccionado) {
                 Medicos::where('id', $this->seleccionado->id)->update([

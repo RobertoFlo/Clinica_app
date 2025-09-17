@@ -113,6 +113,7 @@ class Consulta extends Component
     }
     public function eliminar()
     {
+        $this->dispatch('show-loader');
         $registro = CtlTipoConsulta::withTrashed()->find($this->item['id']);
         if ($registro->deleted_at) {
             $registro->deleted_at = null;
