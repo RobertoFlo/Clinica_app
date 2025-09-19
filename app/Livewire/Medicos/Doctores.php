@@ -18,6 +18,7 @@ class Doctores extends Component
     #[Validate('required|string|regex:/^[\p{L} ]+$/u|min:3')]
     public $especialidad = '';
     public $seleccionado;
+
     public function modalMedicoClose()
     {
         $this->showModal = false;

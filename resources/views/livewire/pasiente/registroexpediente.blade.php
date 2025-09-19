@@ -61,7 +61,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Fecha de Creación</label>
-                    <input type="date" wire:model="fecha_creacion"
+                    <input type="date" wire:model="fecha_creacion" disabled
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('fecha_creacion') border-red-500 @enderror">
                     @error('fecha_creacion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>

@@ -51,8 +51,8 @@ services:
             - pgdata:/var/lib/postgresql/data
         ports:
             - "5432:5432"
-        networks:
-            - laravel
+        # networks:
+        #     - laravel
 
 # # Volumes for persisting data
 volumes:
@@ -60,6 +60,6 @@ volumes:
     # app-vendor:
     # app-node_modules:
 
-# Networks for container communication
-networks:
-    laravel:
+# # Networks for container communication
+# networks:
+#     laravel:

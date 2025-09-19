@@ -32,8 +32,12 @@ class Cita extends Model
     /**
      * Get the patient that owns the Cita.
      */
-    public function paciente()
+    public function expediente()
     {
-        return $this->belongsTo(Paciente::class, 'paciente_id');
+        return $this->belongsTo(MntExpediente::class, 'expediente_id');
+    }
+    public function medico()
+    {
+        return $this->belongsTo(Medicos::class, 'medico_id');
     }
 }

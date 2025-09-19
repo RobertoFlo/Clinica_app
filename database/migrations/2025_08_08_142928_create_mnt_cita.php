@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('mnt_cita', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('paciente_id')->nullable();
+            $table->unsignedBigInteger('expediente_id')->nullable();
             $table->date('fecha_cita'); // Almacena la fecha (YYYY-MM-DD)
             $table->time('hora_cita');  // Almacena la hora (HH:MM:SS)
             $table->string('nombre_paciente')->nullable();
-            $table->foreign('paciente_id')->references('id')->on('mnt_paciente');
+            $table->foreign('expediente_id')->references('id')->on('mnt_expediente');
             $table->timestamps();
             $table->softDeletes();
         });

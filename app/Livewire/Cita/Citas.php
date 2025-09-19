@@ -4,7 +4,9 @@ namespace App\Livewire\Cita;
 
 use Livewire\Component;
 use App\Models\Paciente;
+use App\Models\Medicos;
 use App\Models\Cita;
+use App\Models\MntExpediente;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
@@ -30,8 +32,9 @@ class Citas extends Component
     public $modalForce = false;
     public $search_cita;
     public $fecha_cita_search = '';
-
-
+    public $medicos_planta = [];
+    #[Validate('required|exists:mnt_medicos,id')]
+    public $medico_selected = null;
 
     #[On('item_tabla')]
     public function citasgestion($itemId, $accion)
@@ -104,6 +107,7 @@ class Citas extends Component
             ["%{$busqueda}%", "%{$busqueda}%"]
         )->get();
     }
+   
     public function LimpiarPaciente()
     {
         $this->paciente = '';
@@ -111,10 +115,10 @@ class Citas extends Component
     }
     public function selectPaciente($id)
     {
-        $p = Paciente::withTrashed()->find($id);
+        $p = MntExpediente::with("paciente")->withTrashed()->find($id);
         if ($p) {
-            $this->seleccionado = $p;
-            $this->nombre_paciente = $p->nombre;
+            $this->seleccionado = $p->paciente;
+            $this->nombre_paciente = $p->paciente->nombre;
             $this->LimpiarPaciente();
         } else {
             $this->dispatch('notify', [
@@ -142,6 +146,7 @@ class Citas extends Component
                             'fecha_cita' => $this->fecha_cita,
                             'hora_cita' => $this->hora_cita,
                             'nombre_paciente' => $this->nombre_paciente,
+                            'medico_id' => $this->medico_selected,
                             'updated_at' => now(),
                         ]);
                     });
@@ -153,10 +158,11 @@ class Citas extends Component
                 } else {
                     DB::transaction(function () {
                         DB::table('mnt_cita')->insert([
-                            'paciente_id' => $this->seleccionado['id'] ?? null,
+                            'expediente_id' => $this->seleccionado['id'] ?? null,
                             'fecha_cita' => $this->fecha_cita,
                             'hora_cita' => $this->hora_cita,
                             'nombre_paciente' => $this->nombre_paciente,
+                            'medico_id' => $this->medico_selected,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
@@ -168,7 +174,7 @@ class Citas extends Component
                     ]);
                 }
                 $this->dispatch('show-loader');
-                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion');
+                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion', 'medico_selected');
             } else {
                 $this->dispatch('notify', [
                     'variant' => 'danger',
@@ -180,7 +186,7 @@ class Citas extends Component
             $this->dispatch('notify', [
                 'variant' => 'danger',
                 'title' => 'Error',
-                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.'.$e,
+                'message' => 'Hubo un error al agendar la cita. Inténtalo de nuevo.',
             ]);
         }
     }
@@ -221,12 +227,13 @@ class Citas extends Component
             'nombre_paciente.max' => 'El nombre del paciente no puede tener más de 100 caracteres.',
             'nombre_paciente.min' => 'El nombre del paciente debe tener al menos 5 caracteres.',
             'nombre_paciente.required' => 'Debe seleccionar un paciente de la lista o crear su registro.',
-        ] ;
+            'medico_selected.required' => 'Debe seleccionar un médico de la lista.',
+            'medico_selected.exists' => 'El médico seleccionado no es válido.',
+        ];
     }
     public function render()
     {
-        $query = Cita::withTrashed()->orderBy('fecha_cita', 'desc')->orderBy('hora_cita', 'desc');
-
+        $query = Cita::withTrashed()->with('medico')->orderBy('fecha_cita', 'desc')->orderBy('hora_cita', 'desc');
         if ($this->search_cita) {
             $query->where('nombre_paciente', 'like', '%' . $this->search_cita . '%');
         }
@@ -234,11 +241,14 @@ class Citas extends Component
             $query->where('fecha_cita', $this->fecha_cita_search);
         }
 
+        $this->medicos_planta = Medicos::whereNull('deleted_at')->orderBy('id','asc')->get();
+        
         $paginator = $query->paginate(6);
         return view('livewire.cita.citas', [
             'pacientes' => $this->pacientes,
             'paginator' => $paginator,
             'datos' => $paginator->items(),
+            'medicos_planta' => $this->medicos_planta,
         ]);
     }
 }

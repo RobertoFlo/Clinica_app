@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("nombre");
             $table->string("apellido");
             $table->string("especialidad");
+            $table->unsignedBigInteger('usuario_id')->nullable();
+            $table->foreign('usuario_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

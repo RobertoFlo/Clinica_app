@@ -10,7 +10,6 @@
         <!-- Desktop Menu -->
         <ul class="hidden items-center gap-4 sm:flex  ">
             <!-- User Pic -->
-            @foreach ( $user as $item )
             <li x-data="{ userDropDownIsOpen: false, openWithKeyboard: false }"
                 x-on:keydown.esc.window="userDropDownIsOpen = false, openWithKeyboard = false"
                 class="relative flex items-center">
@@ -20,7 +19,7 @@
                     x-on:keydown.down.prevent="openWithKeyboard = true"
                     class="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary flex items-center gap-2"
                     aria-controls="userMenu">
-                    <span class="text-lg font-bold">{{$item->name}}</span>
+                    <span class="text-lg font-bold">{{$user->name}}</span>
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-10 rounded-full object-cover" />
                 </button>
@@ -32,8 +31,8 @@
                     class="absolute right-0 top-12 flex w-fit min-w-48 flex-col overflow-hidden rounded-radius border border-outline bg-surface-alt py-1.5 bg-white">
                     <li class="">
                         <div class="flex flex-col px-4 py-2">
-                            <span class="text-sm font-medium text-on-surface-strong text-black">{{$item->name}}</span>
-                            <p class="text-xs text-on-surface text-black">{{$item->email}}</p>
+                            <span class="text-sm font-medium text-on-surface-strong text-black">{{$user->name}}</span>
+                            <p class="text-xs text-on-surface text-black">{{$user->email}}</p>
                         </div>
                     </li>
                     <li><a href="/" wire:navigate
@@ -52,8 +51,6 @@
                     </li>
                 </ul>
             </li>
-            @endforeach
-
         </ul>
         <!-- Mobile Menu Button -->
         <button x-on:click="mobileMenuIsOpen = !mobileMenuIsOpen" x-bind:aria-expanded="mobileMenuIsOpen"
@@ -71,7 +68,6 @@
         </button>
         <!-- Mobile Menu -->
         <ul x-cloak x-show="mobileMenuIsOpen" 
-            @foreach ($user as $item)
             x-transition:enter="transition motion-reduce:transition-none ease-out duration-300"
             x-transition:enter-start="-translate-y-full" x-transition:enter-end="translate-y-0"
             x-transition:leave="transition motion-reduce:transition-none ease-out duration-300"
@@ -82,8 +78,8 @@
                     <img src="https://penguinui.s3.amazonaws.com/component-assets/avatar-8.webp" alt="User Profile"
                         class="size-12 rounded-full object-cover" />
                     <div>
-                        <span class="font-medium text-on-surface-strong  text-black">{{$item->name}}</span>
-                        <p class="text-sm text-on-surface  text-black">{{$item->email}}</p>
+                        <span class="font-medium text-on-surface-strong  text-black">{{$user->name}}</span>
+                        <p class="text-sm text-on-surface  text-black">{{$user->email}}</p>
                     </div>
                 </div>
             </li>
@@ -100,8 +96,6 @@
                     </button>
                 </form>
             </li>
-            @endforeach
-
         </ul>
     </nav>
 

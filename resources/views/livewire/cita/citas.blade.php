@@ -1,8 +1,7 @@
 <div>
-    {{-- Nothing in the world is as soft and yielding as water. --}}
     @livewire('components.titulo', ['titulo' => 'Citas Médicas'])
     <div class="  border border-gray-300  rounded flex  flex-wrap bg-white">
-        <div class="lg:w-3/6 w-full">
+        <div class="lg:w-8/12 w-full">
             <div class="m-2">
                 <div class="flex flex-col gap-4 mb-4">
                     <h2 class="text-2xl text-center mt-2 w-full">Citas Agendadas</h2>
@@ -30,8 +29,8 @@
                 </div>
                 @livewire('components.tabla', [
                 'datos' => $datos,
-                'fields' => ['nombre_paciente', 'fecha_cita','hora_cita','deleted_at'],
-                'headers' => ['Paciente','Fecha Cita', 'Hora Cita', 'Estado'],
+                'fields' => ['nombre_paciente',['medico'=>['nombre','apellido']], 'fecha_cita','hora_cita','deleted_at'],
+                'headers' => ['Paciente','Médico','Fecha Cita', 'Hora Cita', 'Estado'],
                 'acciones' => collect(['editar', 'eliminar','destroy']),
 
                 ])
@@ -40,10 +39,10 @@
                 {{ $paginator->links() }}
             </div>
         </div>
-        <div class="lg:w-3/6 w-full">
+        <div class="lg:w-4/12 w-full">
             <h2 class="text-2xl text-center mt-2">Formulario</h3>
                 <div class="p-4">
-                    <label for="paciente" class="block font-medium text-xl">Pacientes</label>
+                    <label for="paciente" class="block font-medium text-xl">Expedientes persona</label>
                     <input type="text" wire:model="paciente" placeholder="Buscar paciente por nombre o documento"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 @error('paciente') !border-red-600 @enderror" />
                     @error('paciente') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
@@ -61,12 +60,10 @@
                         <div>
                             <button wire:click="Paciente"
                                 class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:cursor-pointer">
-                                Crear Paciente
+                                Crear Expediente
                             </button>
                         </div>
-
                     </div>
-
                     <div class="mt-4 h-[125px] overflow-y-auto">
                         @if ($pacientes)
                         <ul class="divide-y divide-gray-200 overflow-y-auto">
@@ -110,6 +107,15 @@
                         <input type="text" wire:model="nombre_paciente" name="nombre" disabled
                             class="mt-1 block w-full border border-gray-300 rounded p-2 @error('nombre_paciente') border-red-500 @enderror">
                         @error('nombre_paciente') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <select wire:model="medico_selected" class="mt-1 block w-full border border-gray-300 rounded p-2 @error('medico_selected') border-red-500 @enderror">
+                            <option value="">Seleccione Médico</option>
+                            @foreach($medicos_planta as $medico)
+                            <option value="{{ $medico->id }}">{{ $medico->nombre }} {{ $medico->apellido }}</option>
+                            @endforeach
+                        </select>
+                        @error('medico_selected') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div class="flex justify-between">
                         <button type="button" wire:click="LimpiarFormulario"

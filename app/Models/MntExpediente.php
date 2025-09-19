@@ -20,4 +20,8 @@ class MntExpediente extends Model
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');
     }
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'expediente_id');
+    }
 }

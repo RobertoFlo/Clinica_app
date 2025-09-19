@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mnt_clinico', function (Blueprint $table) {
+        //
+        Schema::create("ctl_estado", function (Blueprint $table) {
             $table->id();
-            $table->date('fecha_consulta');
-            $table->decimal('total_pagar', 10, 2)->nullable();
+            $table->string("nombre");
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -25,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mnt_clinico');
+        //
+        Schema::dropIfExists("ctl_estado");
     }
 };
