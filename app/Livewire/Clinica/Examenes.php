@@ -1,0 +1,188 @@
+<?php
+
+namespace App\Livewire\Clinica;
+
+use Livewire\Component;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Locked;
+use App\Models\MntClinico;
+use App\Models\MntExpediente;
+use App\Models\CtlTipoExamen;
+use App\Models\CtlEstado;
+use App\Models\MntExamen;
+use Illuminate\Support\Facades\DB;
+
+#[Title('Examen')]
+class Examenes extends Component
+{
+    //#[Locked] 
+    public $id = null;
+    public $modo_edicion = false;
+    public $search_expediente = [];
+    public $persona_registo_examen = [];
+    public $detallesExamenes = [];  //los examenes que se van a registrar
+    public $search = '';
+
+
+
+    //tipos de examenes a realizar
+    public $tipos_examenes = [];
+    public $estados_examenes = [];
+
+    public $estado_examen_id;
+    public $tipo_examen_id;
+
+    ///tabla al crear el examen
+    public $tabla_examenes = [];
+    //
+    public $item = [];
+
+    public function mount($id = null)
+    {
+        if ($id) {
+            $this->id = $id;
+            $this->modo_edicion = session('clinica_examen_modo_edicion');
+            session(['clinica_examen_id' => $id]);
+        } else {
+            $this->modo_edicion = session('clinica_examen_modo_edicion');
+            $this->id = session('clinica_examen_id');
+        }
+    }
+
+    #[On('item_tabla')]
+    public function tabla($itemId, $accion)
+    {
+        $this->item = MntExamen::find($itemId);
+        $seleccion = $accion;
+        switch ($seleccion) {
+            case 'destroy':
+                // if ($this->item && !$this->item->deleted_at) {
+                //     $this->item->delete();
+                //     // Actualizar el total a pagar en mnt_clinico
+                //     $total = DB::table('mnt_examen')
+                //         ->join('ctl_tipo_examen', 'mnt_examen.tipo_examen_id', '=', 'ctl_tipo_examen.id')
+                //         ->where('mnt_examen.clinico_id', $this->persona_registo_examen['id']) //  del registro de mnt_clinico
+                //         ->sum('ctl_tipo_examen.precio');
+
+                //     MntClinico::where('id', $this->persona_registo_examen['id'])->update([
+                //         'total_pagar' => $total
+                //     ]);
+
+                //     $this->dispatch('notify', [
+                //         'variant' => 'success',
+                //         'title' => 'Éxito',
+                //         'message' => 'El examen ha sido eliminado correctamente.'
+                //     ]);
+                // } else {
+                //     $this->dispatch('notify', [
+                //         'variant' => 'warning',
+                //         'title' => 'Atención',
+                //         'message' => 'El examen ya ha sido eliminado previamente o no existe.'
+                //     ]);
+                // }
+                $this->dispatch('notify', [
+                    'variant' => 'info',
+                    'title' => 'Eliminar',
+                    'message' => 'Funcionalidad de eliminación en desarrollo.'
+                ]);
+                break;
+            case 'editar':
+                $this->dispatch('notify', [
+                    'variant' => 'info',
+                    'title' => 'Editar',
+                    'message' => 'Funcionalidad de edición en desarrollo.'
+                ]);
+                break;
+            default:
+                $this->dispatch('notify', [
+                    'variant' => 'danger',
+                    'title' => 'Error',
+                    'message' => 'Acción no reconocida. Inténtalo de nuevo.'
+                ]);
+                break;
+        }
+    }
+
+    public function goBack()
+    {
+
+        return redirect()->to(session('previous_url'));
+    }
+    public function searchExpediente()
+    {
+        if ($this->search) {
+            $query = MntExpediente::with('paciente')->orderBy('id');
+            $query->whereHas('paciente', function ($q) {
+                $q->whereRaw("concat(nombre, ' ', apellido) ilike ?", ['%' . $this->search . '%'])
+                    ->orWhere('nombre', 'ilike', '%' . $this->search . '%')
+                    ->orWhere('apellido', 'ilike', '%' . $this->search . '%');
+            });
+            $this->search_expediente = $query->get();
+        } else {
+            $this->search_expediente = [];
+        }
+    }
+    public function selectExpediente($id)
+    {
+        MntClinico::where('id', $this->persona_registo_examen['id'])->update([
+            'expediente_id' => $id,
+        ]);
+        $this->reset('search_expediente', 'search');
+    }
+    public function agregarExamen()
+    {
+        $this->validate([
+            'tipo_examen_id' => 'required|exists:ctl_tipo_examen,id',
+        ], [
+            'tipo_examen_id.required' => 'El tipo de examen es obligatorio.',
+            'tipo_examen_id.exists' => 'El tipo de examen seleccionado no es válido.',
+        ]);
+        $existeExamen = MntExamen::where('clinico_id', $this->persona_registo_examen['id'])
+            ->where('tipo_examen_id', $this->tipo_examen_id)
+            ->first();
+        if ($existeExamen) {
+            $this->dispatch('notify', [
+                'variant' => 'warning',
+                'title' => 'Atención',
+                'message' => 'El examen ya ha sido agregado previamente.'
+            ]);
+        } else {
+            MntExamen::create([
+                'clinico_id' => $this->persona_registo_examen['id'],
+                'tipo_examen_id' => $this->tipo_examen_id,
+                'estado_id' => 1,
+            ]);
+            $total = DB::table('mnt_examen')
+                ->join('ctl_tipo_examen', 'mnt_examen.tipo_examen_id', '=', 'ctl_tipo_examen.id')
+                ->where('mnt_examen.clinico_id', $this->persona_registo_examen['id']) //  del registro de mnt_clinico
+                ->sum('ctl_tipo_examen.precio');
+
+            MntClinico::where('id', $this->persona_registo_examen['id'])->update([
+                'total_pagar' => $total
+            ]);
+            $this->dispatch('notify', [
+                'variant' => 'success',
+                'title' => 'Éxito',
+                'message' => 'El examen se ha agregado correctamente.'
+            ]);
+        }
+        // Limpiar los campos después de agregar
+        $this->reset(['tipo_examen_id']);
+    }
+    public function render()
+    {
+        $this->tipos_examenes = CtlTipoExamen::all();
+        $this->estados_examenes = CtlEstado::all();
+        $this->tabla_examenes  = MntExamen::with('estado', 'tipoExamen')->where('clinico_id', $this->id)->get();
+        $this->persona_registo_examen = MntClinico::withTrashed()->with('estadoClinico', 'Expediente.paciente', 'examenes')->find($this->id);
+        return view('livewire.clinica.examenes', [
+            'persona_registo_examen' => $this->persona_registo_examen,
+            'modo_edicion' => $this->modo_edicion,
+            'search_expediente' => $this->search_expediente,
+            'estados_examenes' => $this->estados_examenes,
+            'tipos_examenes' => $this->tipos_examenes,
+            'tabla_examenes' => $this->tabla_examenes,
+        ]);
+    }
+}

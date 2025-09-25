@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Livewire\Consultas;
+namespace App\Livewire\TipoConsulta;
 
 use App\Models\CtlTipoConsulta;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
+
+#[Title('Tipos de Consultas')]
 class Consulta extends Component
 {
     use WithPagination;
@@ -142,7 +145,7 @@ class Consulta extends Component
     public function render()
     {
         $paginator = CtlTipoConsulta::withTrashed()->orderBy('id')->paginate($this->perPage);
-        return view('livewire.consultas.consulta',[
+        return view('livewire.tipoconsulta.consulta',[
             'paginator'=> $paginator,
             'datos' => $paginator->items(),
         ]);

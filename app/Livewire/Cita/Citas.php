@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Carbon\Carbon;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
 
+#[Title('Citas Médicas')]
 class Citas extends Component
 {
     use WithPagination;
@@ -55,6 +57,7 @@ class Citas extends Component
                 $this->fecha_cita = $this->seleccionado['fecha_cita'];
                 $this->hora_cita = Carbon::parse($this->seleccionado['hora_cita'])->format('H:i');
                 $this->nombre_paciente = $this->seleccionado['nombre_paciente'];
+                $this->medico_selected = $this->seleccionado['medico_id'];
                 break;
             case 'destroy':
                 // Cita::where('id', $itemId)->forceDelete();
@@ -214,7 +217,7 @@ class Citas extends Component
     public function LimpiarFormulario()
     {
         $this->resetErrorBag();
-        $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion');
+        $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion','medico_selected');
     }
     public function messages(){
         return [

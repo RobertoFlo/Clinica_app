@@ -21,27 +21,30 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm ">
                             @if ($field === 'deleted_at')
                                 <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full  {{ data_get($data, $field) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ data_get($data, $field) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
                                     {{ data_get($data, $field) ? 'Inactivo' : 'Activo' }}
                                 </span>
                             @else
-                                @if (is_array($field))
-                                    @if (array_is_list($field))
-                                        {{ collect($field)->map(fn($f) => formatValue(data_get($data, $f)))->implode(' ') }}
-                                    @else
-                                        @foreach ($field as $parent => $children)
-                                            @if (is_array($children))
-                                                @foreach ($children as $child)
-                                                    {{ formatValue(data_get($data, "$parent.$child")) }}
-                                                @endforeach
-                                            @else
-                                                {{ formatValue(data_get($data, "$parent.$children")) }}
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                @else
-                                    {{ formatValue(data_get($data, $field)) }}
-                                @endif
+                                @php
+                                    // Función auxiliar para aplanar las rutas de los arrays anidados
+                                    $flattenKeys = function (array $keys, string $prefix = '') use (&$flattenKeys) {
+                                        $result = [];
+                                        foreach ($keys as $key => $value) {
+                                            if (is_array($value)) {
+                                                $result = array_merge($result, $flattenKeys($value, $prefix . ($prefix ? '.' : '') . $key));
+                                            } else {
+                                                $result[] = $prefix . ($prefix ? '.' : '') . $value;
+                                            }
+                                        }
+                                        return $result;
+                                    };
+                                    // Generamos la lista final de rutas a buscar
+                                    $fieldsToProcess = is_array($field) && !array_is_list($field)
+                                        ? $flattenKeys($field)
+                                        : (array) $field;
+                                @endphp
+                                {{-- Recorremos la lista aplanada y mostramos los valores --}}
+                                {{ collect($fieldsToProcess)->map(fn($f) => formatValue(data_get($data, $f)))->implode(' ') }}
                             @endif
                         </td>
                     @endforeach
@@ -49,7 +52,7 @@
                         <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium w-[280px]">
                             @if ($acciones->contains('editar') && data_get($data, 'deleted_at') === null)
                                 <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'editar' })"
-                                    class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                                    class="text-indigo-600 hover:text-indigo-900">Actualizar</a>
                             @endif
                             @if ($acciones->contains('eliminar'))
                                 <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'eliminar' })"

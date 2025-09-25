@@ -6,7 +6,9 @@ use App\Models\Medicos;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 
+#[Title('Medicos')]
 class Doctores extends Component
 {
     public $showModal = false;

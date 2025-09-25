@@ -5,7 +5,9 @@ namespace App\Livewire\Pasiente;
 use Livewire\Component;
 use App\Models\MntExpediente;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 
+#[Title('Expedientes')]
 class Expediente extends Component
 {
     public $item = []; //Ítem seleccionado de la tabla 

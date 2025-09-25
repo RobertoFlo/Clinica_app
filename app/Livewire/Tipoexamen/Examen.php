@@ -7,7 +7,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
 
+#[Title('Tipos de Examenes')]
 class Examen extends Component
 {
     use WithPagination;

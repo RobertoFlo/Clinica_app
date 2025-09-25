@@ -13,6 +13,9 @@ use Livewire\Attributes\On;
 use Carbon\Carbon;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
+
+#[Title('Registro de Expediente')]
 class Registroexpediente extends Component
 {
     #[Locked] 
