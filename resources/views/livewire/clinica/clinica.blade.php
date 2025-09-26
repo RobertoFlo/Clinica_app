@@ -16,8 +16,8 @@
     <div class="my-4">
         @livewire('components.tabla', [
             'datos' => $datos,
-           'fields' => ['expediente.numero_expediente', ['expediente.paciente.nombre', 'expediente.paciente.apellido'], 'fecha_consulta', 'estado_clinico.nombre'],
-            'headers' => ['Expediente','Nombre Paciente', 'Fecha Consulta', 'Estado'],
+           'fields' => ['expediente.numero_expediente', ['expediente.paciente.nombre', 'expediente.paciente.apellido'], 'fecha_consulta', 'estado_clinico.nombre','deleted_at'],
+            'headers' => ['Expediente','Nombre Paciente', 'Fecha Consulta', 'Estado Examen','Estado Registro'],
             'acciones' => collect(['ver', 'editar', 'eliminar']),
         ])
     </div>

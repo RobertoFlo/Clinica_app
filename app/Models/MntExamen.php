@@ -22,7 +22,7 @@ class MntExamen extends Model
         return $this->belongsTo(MntClinico::class, 'clinico_id');
     }
 
-    public function tipoExamen()
+    public function tipoexamen()
     {
         return $this->belongsTo(CtlTipoExamen::class, 'tipo_examen_id');
     }

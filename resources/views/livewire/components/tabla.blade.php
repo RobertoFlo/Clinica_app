@@ -21,7 +21,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm ">
                             @if ($field === 'deleted_at')
                                 <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ data_get($data, $field) ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
+                                    class=" inline-flex  leading-5 font-semibold rounded text-white px-2 py-1 {{ data_get($data, $field) ? 'bg-red-500 text-red-800' : 'bg-green-500 text-green-800' }}">
                                     {{ data_get($data, $field) ? 'Inactivo' : 'Activo' }}
                                 </span>
                             @else
@@ -44,7 +44,7 @@
                                         : (array) $field;
                                 @endphp
                                 {{-- Recorremos la lista aplanada y mostramos los valores --}}
-                                {{ collect($fieldsToProcess)->map(fn($f) => formatValue(data_get($data, $f)))->implode(' ') }}
+                               {!! collect($fieldsToProcess)->map(fn($f) => formatValue(data_get($data, $f)))->implode(' ') !!}
                             @endif
                         </td>
                     @endforeach
