@@ -212,7 +212,7 @@
                     class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
                     Cancelar
                 </button>
-                <button type="button" wire:click="saveestado"
+                <button type="button" wire:click="saveestado" x-on:click="$dispatch('show-loader')"
                     class="mt-3 inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-blue-400 sm:mt-0 sm:w-auto">
                     Aceptar
                 </button>
