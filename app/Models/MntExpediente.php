@@ -28,4 +28,8 @@ class MntExpediente extends Model
     {
         return $this->hasMany(Cita::class, 'expediente_id');
     }
+     public function consultas()
+    {
+        return $this->hasMany(MntConsulta::class, 'expediente_id');
+    }
 }

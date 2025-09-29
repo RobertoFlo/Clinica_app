@@ -24,5 +24,8 @@ class Medicos extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
-    
+    public function consulta()
+    {
+        return $this->hasOne(MntConsulta::class, 'medico_id');
+    }
 }

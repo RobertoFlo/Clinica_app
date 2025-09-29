@@ -26,4 +26,8 @@ class MntClinico extends Model
     {
         return $this->hasMany(MntExamen::class, 'clinico_id');
     }
+    public function consulta()
+    {
+        return $this->hasOne(MntConsulta::class, 'clinico_id');
+    }
 }

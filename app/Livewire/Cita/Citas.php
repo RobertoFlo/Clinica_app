@@ -6,6 +6,9 @@ use Livewire\Component;
 use App\Models\Paciente;
 use App\Models\Medicos;
 use App\Models\Cita;
+use App\Models\CtlTipoConsulta;
+use App\Models\CtlTipoExamen;
+use App\Models\MntConsulta;
 use App\Models\MntExpediente;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +40,8 @@ class Citas extends Component
     public $medicos_planta = [];
     #[Validate('required|exists:mnt_medicos,id')]
     public $medico_selected = null;
+    public $tipos_consulta = [];
+    public $tipo_consulta_selected = null;
 
     #[On('item_tabla')]
     public function citasgestion($itemId, $accion)
@@ -131,7 +136,31 @@ class Citas extends Component
             ]);
         }
     }
-    
+    public function crearConsulta(){
+        $this->validate(
+            [
+                'tipo_consulta_selected' => 'required|exists:ctl_tipo_consulta,id',
+            ],
+            [
+                'tipo_consulta_selected.required' => 'El tipo de consulta es obligatorio.',
+                'tipo_consulta_selected.exists' => 'El tipo de consulta seleccionado no es válido.',
+            ]
+        );
+        $tipo_cita = CtlTipoConsulta::where('id', '=', $this->tipo_consulta_selected)->first();
+        MntConsulta::create([
+            'cita_id' => $this->seleccionado['id'],
+            'expediente_id' => $this->seleccionado['expediente_id'] ?? null,
+            'medico_id' => $this->seleccionado['medico_id'] ?? null,
+            'fecha_consulta' => now(),
+            'tipo_consulta_id' => $tipo_cita['id'] ?? null,
+            'descripcion_consulta' => '',
+            'estado_id' => 1,
+            'subtotal_final' => $tipo_cita['precio'] ?? 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $this->reset('tipo_consulta_selected');
+    }
     public function agendarCita()
     {
         $this->validate();
@@ -177,7 +206,7 @@ class Citas extends Component
                     ]);
                 }
                 $this->dispatch('show-loader');
-                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion', 'medico_selected');
+                $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion', 'medico_selected','tipo_consulta_selected');
             } else {
                 $this->dispatch('notify', [
                     'variant' => 'danger',
@@ -217,7 +246,7 @@ class Citas extends Component
     public function LimpiarFormulario()
     {
         $this->resetErrorBag();
-        $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion','medico_selected');
+        $this->reset('hora_cita', 'nombre_paciente', 'fecha_cita', 'seleccionado', 'modo_edicion','medico_selected','tipo_consulta_selected');
     }
     public function messages(){
         return [
@@ -245,13 +274,14 @@ class Citas extends Component
         }
 
         $this->medicos_planta = Medicos::whereNull('deleted_at')->orderBy('id','asc')->get();
-        
+        $this->tipos_consulta = DB::table('ctl_tipo_consulta')->whereNull('deleted_at')->orderBy('id','asc')->get();
         $paginator = $query->paginate(6);
         return view('livewire.cita.citas', [
             'pacientes' => $this->pacientes,
             'paginator' => $paginator,
             'datos' => $paginator->items(),
             'medicos_planta' => $this->medicos_planta,
+            'tipos_consulta' => $this->tipos_consulta,
         ]);
     }
 }

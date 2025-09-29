@@ -126,14 +126,47 @@
                         </select>
                         @error('medico_selected') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     </div>
+                    @if ($modo_edicion)
+                    <div class="relative w-full overflow-hidden rounded-lg border border-amber-500 bg-surface text-on-surface" role="alert">
+                        <div class="flex w-full items-center gap-2 bg-amber-100 p-4">
+                            <div class="bg-amber-500/15 text-amber-500 rounded-full p-1" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-2">
+                                <h3 class="text-sm font-semibold text-warning">Generar una consulta</h3>
+                                <p class="text-xs font-medium sm:text-sm">Para generar una consulta debe completar los detalles.</p>
+                            </div>
+                            <button class="ml-auto" aria-label="dismiss alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="2.5" class="size-4 shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <select name="tipo_consulta" id="tipo_consulta" wire:model="tipo_consulta_selected"
+                            class="mt-1 block w-full border border-gray-300 rounded p-2 @error('tipo_consulta_selected') border-red-500 @enderror">
+                            <option value="">Seleccione Tipo de Consulta</option>
+                            @foreach($tipos_consulta as $tipo)
+                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }} Precio: ${{ $tipo->precio }}</option>
+                            @endforeach
+                        </select>
+                        @error('tipo_consulta_selected') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+                    @endif
                     <div class="flex justify-between">
-                        <button type="button" wire:click="LimpiarFormulario"
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hover:cursor-pointer">
-                            Limpiar
-                        </button>
                         <div>
+                            <button type="button" wire:click="LimpiarFormulario"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hover:cursor-pointer">
+                                Limpiar
+                            </button>
+                        </div>
+                        <div class="flex flex-col gap-2">
                             @if ($modo_edicion)
-                            <button type="button" wire:click="Consulta"
+                            <button type="button" wire:click="crearConsulta"
                                 class="inline-flex items-center gap-2 px-4 py-2 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:cursor-pointer">
                                 Generar Consulta
                                 <svg fill="#ffff" width="20px" height="20px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">

@@ -40,4 +40,8 @@ class Cita extends Model
     {
         return $this->belongsTo(Medicos::class, 'medico_id');
     }
+    public function consulta()
+    {
+        return $this->hasOne(MntConsulta::class, 'cita_id');
+    }
 }

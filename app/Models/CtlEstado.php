@@ -16,5 +16,9 @@ class CtlEstado extends Model
     {
         return $this->hasMany(MntExamen::class, 'estado_id');
     }
+    public function consulta()
+    {
+        return $this->hasMany(MntConsulta::class, 'estado_id');
+    }
     
 }
