@@ -48,11 +48,11 @@
                             @endif
                         </td>
                     @endforeach
-                    @if (isset($acciones))
+                    @if (isset($acciones) && $acciones->count() > 0)
                         <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium w-[150px] flex gap-3">
                             @if ($acciones->contains('ver'))
-                                <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'agregar' })" title="Ver Detalles"
-                                    class="ml-2 text-blue-600 hover:text-blue-900">
+                                <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'ver' })" title="Ver Detalles"
+                                    class=" text-blue-600 hover:text-blue-900">
                                     <svg width="19px" height="19px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 10c0-3.9 3.1-7 7-7s7 3.1 7 7h-1c0-3.3-2.7-6-6-6s-6 2.7-6 6H1zm4 0c0-1.7 1.3-3 3-3s3 1.3 3 3-1.3 3-3 3-3-1.3-3-3zm1 0c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2z"/></svg>
                                 </a>
                             @endif
@@ -63,7 +63,7 @@
                             @endif
                             @if ($acciones->contains('eliminar'))
                                 <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'eliminar' })" title="{{ data_get($data, 'deleted_at') ? 'Activar' : 'Desactivar' }}"
-                                    class="ml-2 {{ data_get($data, 'deleted_at') ? 'text-green-600 hover:text-green-900' : 'hover:text-red-900 text-red-600' }}">
+                                    class="{{ data_get($data, 'deleted_at') ? 'text-green-600 hover:text-green-900' : 'hover:text-red-900 text-red-600' }}">
                                     @if (data_get($data, 'deleted_at'))
                                     <svg width="19px" height="19px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.006 8.267L.78 9.5 0 8.73l2.09-2.07.76.01 2.09 2.12-.76.76-1.167-1.18a5 5 0 0 0 9.4 1.983l.813.597a6 6 0 0 1-11.22-2.683zm10.99-.466L11.76 6.55l-.76.76 2.09 2.11.76.01 2.09-2.07-.75-.76-1.194 1.18a6 6 0 0 0-11.11-2.92l.81.594a5 5 0 0 1 9.3 2.346z"/></svg>
                                     @else
@@ -73,13 +73,13 @@
                             @endif
                             @if ($acciones->contains('destroy'))
                                 <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'destroy' })"
-                                    class="ml-2 hover:text-red-900 text-red-600" title="Eliminar Permanentemente">
+                                    class=" hover:text-red-900 text-red-600" title="Eliminar Permanentemente">
                                     <svg width="19px" height="19px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 3h3v1h-1v9l-1 1H4l-1-1V4H2V3h3V2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1zM9 2H6v1h3V2zM4 13h7V4H4v9zm2-8H5v7h1V5zm1 0h1v7H7V5zm2 0h1v7H9V5z"/></svg>
                                 </a>
                             @endif
                             @if ($acciones->contains('agregar'))
                                 <a href="#" wire:click="$dispatch('item_tabla', { itemId: {{ data_get($data, 'id') }} , accion: 'agregar' })"
-                                    class="ml-2 text-blue-600 hover:text-blue-900" title="Agregar Nuevo Registro">
+                                    class=" text-blue-600 hover:text-blue-900" title="Agregar Nuevo Registro">
                                   <svg width="19px" height="19px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/></svg>
                             @endif
                         </td>

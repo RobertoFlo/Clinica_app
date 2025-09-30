@@ -37,10 +37,10 @@
                             <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->telefono ?? 'N/A' }}</dd>
                             <dt class="text-sm font-medium text-gray-500">Estado Clínico de los exámenes</dt>
                             <div class="flex items-center gap-2">
-                            <dd class=" text-sm text-blue-900 font-bold">{{ $persona_registo_examen->estadoclinico->nombre ?? 'N/A' }}</dd> 
-                            @if($modo_edicion)
+                                <dd class=" text-sm text-blue-900 font-bold">{{ $persona_registo_examen->estadoclinico->nombre ?? 'N/A' }}</dd>
+                                @if($modo_edicion)
                                 <button wire:click="editEstadoClinico" class="text-sm text-white hover:underline bg-blue-500 border-blue-900 rounded-full px-3 py-1 ">Editar</button>
-                            @endif
+                                @endif
                             </div>
                             <dt class="text-sm font-medium text-gray-500">Total valor de Examenes</dt>
                             <dd class="mt-1 text-sm text-red-900 font-bold">$ {{ $persona_registo_examen->total_pagar ?? '--' }}</dd>
@@ -48,12 +48,79 @@
                     </dl>
                 </div>
             </div>
+            <div class="flex justify-end px-6 ">
+                <button class="inline-flex items-center px-4 py-2 bg-amber-300 gap-1 border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-amber-500 focus:outline-none focus:border-amber-700 focus:ring ring-amber-300 disabled:opacity-25 transition ease-in-out duration-150" wire:click="examenexcepcional" x-on:click="$dispatch('show-loader')">
+                    Agregar Examen excepcional
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        class="size-5 fill-on-info dark:fill-on-info" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
             <div class="px-4 py-5 sm:px-6">
                 @livewire('components.tabla', [
                 'datos' => $tabla_examenes ?? [],
-                'fields' => ['tipoexamen.nombre', 'resultado','tipoexamen.precio','estado.nombre'],
+                'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
                 'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
                 'acciones' => collect(['editar']),
+                ])
+            </div>
+        </div>
+    </div>
+    @elseif($modo_lectura)
+    <div class="flex flex-col gap-4">
+        @livewire('components.titulo', ['titulo' => 'Detalles de Exámenes Médicos'])
+        <div>
+            <button wire:click="goBack" type="button"
+                class="inline-flex items-center px-4 py-2 bg-gray-600 gap-1 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 focus:outline-none focus:border-gray-700 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                Volver
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    class="size-5 fill-on-info dark:fill-on-info" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-xl leading-6 font-medium text-gray-900">Detalles del Examen Médico</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Información detallada de los examenes medicos.</p>
+                <div class="mt-6">
+                    <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500">Número de Expediente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->numero_expediente ?? 'N/A' }}</dd>
+                            <dt class="text-sm font-medium text-gray-500">Fecha del Examen</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->fecha_consulta ?? 'N/A' }}</dd>
+                            <dt class="text-sm font-medium text-gray-500">Nombre del Paciente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->nombre ?? 'N/A' }} {{ $persona_registo_examen->expediente->paciente->apellido ?? '' }}</dd>
+                            <dt class="text-sm font-medium text-gray-500">Sexo del Paciente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->sexo ?? 'N/A' }}</dd>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500">Documento de identidad Paciente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->documento_identidad ?? 'N/A' }}</dd>
+                            <dt class="text-sm font-medium text-gray-500">Teléfono del Paciente</dt>
+                            <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->telefono ?? 'N/A' }}</dd>
+                            <dt class="text-sm font-medium text-gray-500">Estado Clínico de los exámenes</dt>
+                            <div class="flex items-center gap-2">
+                                <dd class=" text-sm text-blue-900 font-bold">{{ $persona_registo_examen->estadoclinico->nombre ?? 'N/A' }}</dd>
+                            </div>
+                            <dt class="text-sm font-medium text-gray-500">Total valor de Examenes</dt>
+                            <dd class="mt-1 text-sm text-red-900 font-bold  ">$ {{ $persona_registo_examen->total_pagar ?? '--' }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="px-4 py-5 sm:px-6">
+                @livewire('components.tabla', [
+                'datos' => $tabla_examenes ?? [],
+                'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
+                'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
+                'acciones' => collect([]),
                 ])
             </div>
         </div>
@@ -159,7 +226,7 @@
                         <div>
                             @livewire('components.tabla', [
                             'datos' => $tabla_examenes ?? [],
-                            'fields' => ['tipoexamen.nombre', 'resultado','tipoexamen.precio','estado.nombre'],
+                            'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
                             'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
                             'acciones' => collect(['editar','destroy']),
                             ])
@@ -188,7 +255,7 @@
             x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm">
-            <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4 space-y-3">
                 <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left space-y-3">
                     <h3 id="dialog-title" class="text-xl font-semibold text-center leading-6">
                         Actualización del Estado de Examen Médico
@@ -206,6 +273,31 @@
                         @error('select_estado_examen_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
+                <div class="flex w-full max-w-xl text-center flex-col gap-1">
+                    <span class=" pl-0.5 text-sm text-center ">Cover Picture</span>
+                    @if ($foto)
+                    <div class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface dark:border-outline-dark dark:text-on-surface-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-12 h-12 opacity-75">
+                            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
+                        </svg>
+                        <div class="group">
+                            <label for="fileInputDragDrop" class="font-medium text-primary group-focus-within:underline dark:text-primary-dark">
+                                <input wire:model="fileInputDragDrop" id="fileInputDragDrop" type="file" class="sr-only" aria-describedby="validFileFormats" />
+                                Busca
+                            </label>
+                            o arrastra y suelta aquí
+                        </div>
+                        <small id="validFileFormats">PDF,Docx - Max 5MB</small>
+                    </div>
+                    @else
+                    <div class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface dark:border-outline-dark dark:text-on-surface-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-12 h-12 opacity-75">
+                            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
+                        </svg>
+                        <small id="validFileFormats">PDF,Docx - Max 5MB</small>
+                    </div>
+                    @endif
+                </div>
             </div>
             <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
                 <button type="button" wire:click="closeModal"
@@ -213,6 +305,52 @@
                     Cancelar
                 </button>
                 <button type="button" wire:click="saveestado" x-on:click="$dispatch('show-loader')"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-blue-400 sm:mt-0 sm:w-auto">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div wire:show="showModalExamen" x-transition.opacity.duration.500ms
+        class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
+        <div wire:show="showModalExamen" x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left space-y-3">
+                    <div class="relative w-full overflow-hidden rounded-lg border border-amber-500 bg-surface text-on-surface dark:bg-surface-dark dark:text-on-surface-dark" role="alert">
+                        <div class="flex w-full items-center gap-2 bg-amber-100 p-4">
+                            <div class="bg-amber-500/15 text-amber-500 rounded-full p-1" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-6" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-2">
+                                <h3 class="text-sm font-semibold text-warning">Se agregará un examen a la ficha clinica</h3>
+                                <p class="text-xs font-medium sm:text-sm">Al agregar el nuevo examen no se podrá eliminar.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center flex-col items-center">
+                        <select wire:model="tipo_examen_id"
+                            class="mt-1 block w-full border border-gray-300 rounded p-2 @error('tipo_examen_id') border-red-500 @enderror">
+                            <option value="">Seleccione un tipo de examen</option>
+                            @foreach($tipos_examenes as $tipo)
+                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }} - <strong class="text-green-500">${{ $tipo->precio }}</strong></option>
+                            @endforeach
+                        </select>
+                        @error('tipo_examen_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </div>
+            <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
+                <button type="button" wire:click="closeModalExamen"
+                    class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
+                    Cancelar
+                </button>
+                <button type="button" wire:click="saveexcepcional" x-on:click="$dispatch('show-loader')"
                     class="mt-3 inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-blue-400 sm:mt-0 sm:w-auto">
                     Aceptar
                 </button>
