@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Models\Consulta;
 use App\Models\CtlTipoConsulta;
 use App\Models\MntConsulta;
+use App\Models\MntExamen;
 use App\Models\Paciente;
 use App\Models\MntExpediente;
 use App\Models\User;
@@ -29,14 +30,18 @@ class Mantenimiento extends Component
     public $medicos = [];
     ///modo edicion
     public $modo_edicion = false;
-
+    public $paciente_selected_examenes = [];
 
     public function mount()
     {
         $this->modo_edicion = session()->get('modo_edicion');
         if ($this->modo_edicion) {
             $id = session()->get('consulta');
-            $this->paciente_selected = MntConsulta::with('expediente.paciente','medico','clinico.examenes','cita', 'estado', 'receta')->where('id', $id)->first();
+            $this->paciente_selected = MntConsulta::with('expediente.paciente','medico','cita', 'estado', 'receta')->where('id', $id)->first();
+            if($this->paciente_selected->clinico_id){
+                $datos = MntExamen::with('tipoexamen', 'estado')->where('clinico_id', $this->paciente_selected->clinico_id)->get();
+                $this->paciente_selected_examenes = collect($datos->items())->map->toArray()->all();
+            }
         } else {
             $usuario = Auth::user();
             $medico = $usuario->medico;
@@ -114,6 +119,6 @@ class Mantenimiento extends Component
     {
         $this->tipo_consulta = CtlTipoConsulta::all();
         $this->medicos = Medicos::all();
-        return view('livewire.consulta.mantenimiento', ['expedientes' => $this->expedientes, 'paciente_selected' => $this->paciente_selected, 'tipo_consulta' => $this->tipo_consulta, 'medicos' => $this->medicos]);
+        return view('livewire.consulta.mantenimiento', ['expedientes' => $this->expedientes, 'paciente_selected' => $this->paciente_selected, 'tipo_consulta' => $this->tipo_consulta, 'medicos' => $this->medicos,'paciente_selected_examenes' => $this->paciente_selected_examenes]);
     }
 }
