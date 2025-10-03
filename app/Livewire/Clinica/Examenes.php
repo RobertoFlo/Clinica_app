@@ -14,11 +14,16 @@ use App\Models\MntExamen;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use Exception;
+
 #[Title('Examen')]
 class Examenes extends Component
 {
-  
+
     use WithFileUploads;
+
+    public $errorMessage = '';
     public $id = null;
     public $modo_edicion = false;
     public $search_expediente = [];
@@ -26,7 +31,7 @@ class Examenes extends Component
     public $detallesExamenes = [];  //los examenes que se van a registrar
     public $search = '';
     public $modo_lectura = false;
-    public $fileInputDragDrop = null;
+    public $fileInputDragDrop;
 
     //tipos de examenes a realizar
     public $tipos_examenes = [];
@@ -90,7 +95,6 @@ class Examenes extends Component
             case 'editar':
                 if ($this->modo_edicion) {
                     $this->select_estado_examen = MntExamen::with('estado', 'tipoexamen')->find($itemId);
-                    // dd($this->select_estado_examen['estado']['id']);
                     $this->select_estado_examen_id = $this->select_estado_examen['estado']['id'];
                     if ($this->select_estado_examen['url_documento'] == null) {
                         $this->foto = true;
@@ -121,7 +125,7 @@ class Examenes extends Component
     }
     public function closeModal()
     {
-        $this->reset('select_estado_examen', 'select_estado_examen_id');
+        $this->reset('select_estado_examen', 'select_estado_examen_id', 'foto', 'fileInputDragDrop');
         $this->resetErrorBag();
         $this->showModal = false;
     }
@@ -172,54 +176,57 @@ class Examenes extends Component
         $this->reset(['tipo_examen_id', 'fileInputDragDrop', 'foto']);
         $this->closeModalExamen();
     }
+    public function capturarFoto()
+    {
+        $this->foto = true;
+    }
     public function saveestado()
     {
-        $this->validate([
-            'select_estado_examen_id' => 'required',
-        ], [
-            'select_estado_examen_id.required' => 'El estado es obligatorio.',
-            'select_estado_examen_id.exists' => 'El estado seleccionado no es válido.',
-        ]);
-       // if ($this->select_estado_examen_id) {
-            if ($this->fileInputDragDrop) {
-                try {
-                    $filename = Carbon::now()->format('Ymd_His').'_'.$this->select_estado_examen['id'] . '_' .$this->select_estado_examen['clinico_id'].$this->fileInputDragDrop->getClientOriginalName();//solo el nombre del archivo
+        if ($this->fileInputDragDrop) {
+            try {
+                $filename = Carbon::now()->format('Ymd_His') . $this->select_estado_examen['id'] . $this->select_estado_examen['clinico_id'] . $this->fileInputDragDrop->getClientOriginalName(); //solo el nombre del archivo
 
-                    $this->fileInputDragDrop->storeAs('examenes', $filename, 'public'); //solo el guardado del nombre del archivo
-
-                    MntExamen::where('id', $this->select_estado_examen['id'])->update([
-                        'estado_id' => $this->select_estado_examen_id,
-                        'url_documento' => $filename,
-                    ]);
-                } catch (\Exception $e) {
-                    $this->dispatch('notify', [
-                        'variant' => 'danger',
-                        'title' => 'Error',
-                        'message' => 'Error al subir el archivo. Inténtalo de nuevo.'
-                    ]);
-                    return;
+                if ($this->select_estado_examen['url_documento']) {
+                    $path = 'examenes/' . $this->select_estado_examen['url_documento'];
+                    $disk = Storage::disk('public');
+                    if ($disk->exists($path)) {
+                        return $disk->delete($path);
+                    }
                 }
-            } else {
+
+                $this->fileInputDragDrop->storeAs('examenes', $filename, 'public'); //solo el guardado del nombre del archivo
+
                 MntExamen::where('id', $this->select_estado_examen['id'])->update([
                     'estado_id' => $this->select_estado_examen_id,
+                    'url_documento' => $filename,
                 ]);
-            }
+            } catch (Exception $e) {
 
-            $this->dispatch('notify', [
-                'variant' => 'success',
-                'title' => 'Éxito',
-                'message' => 'El estado del examen ha sido actualizado correctamente.'
+                $this->dispatch('notify', [
+                    'variant' => 'danger',
+                    'title' => 'Error',
+                    'message' => 'Error al subir el archivo. Inténtalo de nuevo.'
+                ]);
+                return;
+            }
+        } else {
+            $this->validate([
+                'select_estado_examen_id' => 'required',
+            ], [
+                'select_estado_examen_id.required' => 'El estado es obligatorio.',
+                'select_estado_examen_id.exists' => 'El estado seleccionado no es válido.',
             ]);
-        // } else {
-        //     MntClinico::where('id', $this->persona_registo_examen['id'])->update([
-        //         'estado_id' => $this->select_estado_examen_id,
-        //     ]);
-        //     $this->dispatch('notify', [
-        //         'variant' => 'success',
-        //         'title' => 'Éxito',
-        //         'message' => 'El estado del examen ha sido actualizado correctamente.'
-        //     ]);
-        // }
+            MntExamen::where('id', $this->select_estado_examen['id'])->update([
+                'estado_id' => $this->select_estado_examen_id,
+            ]);
+        }
+
+        $this->dispatch('notify', [
+            'variant' => 'success',
+            'title' => 'Éxito',
+            'message' => 'El estado del examen ha sido actualizado correctamente.'
+        ]);
+
         $this->closeModal();
     }
     public function goBack()

@@ -23,5 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/clinica', App\Livewire\Clinica\Clinica::class);
     Route::get('/clinica/examenes/{id?}', App\Livewire\Clinica\Examenes::class)->name('clinica.examenes');
     Route::get('/consultas', App\Livewire\Consulta\Consultas::class)->name('consulta');
+    Route::get('/consultas/mantenimiento/{id?}', App\Livewire\Consulta\Mantenimiento::class)->name('consulta.mantenimiento');
+
 });
 

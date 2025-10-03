@@ -33,7 +33,7 @@ if (!function_exists("formatValue")) {
             $num = abs($num);
             return $sign . '$' . number_format($num, 2, '.', ',');
         }
-        if (filter_var($value, FILTER_VALIDATE_URL) && preg_match('#/storage/examenes/#', $value)) {
+        if (filter_var($value, FILTER_VALIDATE_URL) && preg_match('#/storage/#', $value)) {
                 $label = basename(parse_url($value, PHP_URL_PATH)) ?: 'Ver documento';
                 return '<a href="' . $value . '" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">'
                         . $label . '</a>';

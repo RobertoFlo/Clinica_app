@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class MntExamen extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $table = 'mnt_examen';
     protected $fillable = [
         'clinico_id',
@@ -33,19 +34,17 @@ class MntExamen extends Model
     {
         return $this->belongsTo(CtlEstado::class, 'estado_id');
     }
-    protected function urlDocumento(): Attribute
+    protected $appends = ['documento_publico'];
+    protected function documentoPublico(): Attribute
     {
-       return Attribute::make(
-            get: function (?string $value) {
-                if (!$value) {
+        return Attribute::make(
+            get: function () {
+                if ($this->url_documento) {
+                    return asset("/storage/examenes/$this->url_documento");
+                } else {
                     return null;
                 }
-                $relative = 'examenes/' . $value;
-                return Storage::disk('public')->exists($relative)
-                    ? asset('storage/' . $relative)
-                    : null;
-            },
+            }
         );
     }
-    
 }

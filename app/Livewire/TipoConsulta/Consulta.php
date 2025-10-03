@@ -144,10 +144,10 @@ class Consulta extends Component
     
     public function render()
     {
-        $paginator = CtlTipoConsulta::withTrashed()->orderBy('id')->paginate($this->perPage);
+        $paginator = CtlTipoConsulta::withTrashed()->orderBy('fecha_consulta', 'desc')->paginate($this->perPage);
         return view('livewire.tipoconsulta.consulta',[
             'paginator'=> $paginator,
-            'datos' => $paginator->items(),
+            'datos' => collect($paginator->items())->map->toArray()->all(),
         ]);
     }
 }

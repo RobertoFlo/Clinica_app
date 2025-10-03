@@ -55,8 +55,8 @@ class MntConsulta extends Model
         return $this->belongsTo(CtlEstado::class, 'estado_id');
     }
 
-    // public function receta()
-    // {
-    //     return $this->hasOne(MntReceta::class, 'consulta_id');
-    // }
+    public function receta()
+    {
+        return $this->hasOne(MntReceta::class, 'consulta_id');
+    }
 }

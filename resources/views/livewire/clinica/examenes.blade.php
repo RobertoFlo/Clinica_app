@@ -62,7 +62,7 @@
             <div class="px-4 py-5 sm:px-6">
                 @livewire('components.tabla', [
                 'datos' => $tabla_examenes ?? [],
-                'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
+                'fields' => ['tipoexamen.nombre', 'documento_publico','tipoexamen.precio','estado.nombre'],
                 'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
                 'acciones' => collect(['editar']),
                 ])
@@ -118,7 +118,7 @@
             <div class="px-4 py-5 sm:px-6">
                 @livewire('components.tabla', [
                 'datos' => $tabla_examenes ?? [],
-                'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
+                'fields' => ['tipoexamen.nombre', 'documento_publico','tipoexamen.precio','estado.nombre'],
                 'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
                 'acciones' => collect([]),
                 ])
@@ -226,7 +226,7 @@
                         <div>
                             @livewire('components.tabla', [
                             'datos' => $tabla_examenes ?? [],
-                            'fields' => ['tipoexamen.nombre', 'url_documento','tipoexamen.precio','estado.nombre'],
+                            'fields' => ['tipoexamen.nombre', 'documento_publico','tipoexamen.precio','estado.nombre'],
                             'headers' => ['Tipo de Examen', 'Documento','Precio','Estado'],
                             'acciones' => collect(['editar','destroy']),
                             ])
@@ -275,29 +275,41 @@
                 </div>
                 <div class="flex w-full max-w-xl text-center flex-col gap-1">
                     <span class=" pl-0.5 text-sm text-center ">Cover Picture</span>
-                    @if ($foto)
-                    <div class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface dark:border-outline-dark dark:text-on-surface-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-12 h-12 opacity-75">
-                            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
-                        </svg>
-                        <div class="group">
-                            <label for="fileInputDragDrop" class="font-medium text-primary group-focus-within:underline dark:text-primary-dark">
-                                <input wire:model="fileInputDragDrop" id="fileInputDragDrop" type="file" class="sr-only" aria-describedby="validFileFormats" />
-                                Busca
-                            </label>
-                            o arrastra y suelta aquí
+                    <div x-data="{ open: @entangle('foto') }">
+                        <div x-show="open" class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface @error('fileInputDragDrop') border-red-500 @enderror">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-12 h-12 opacity-75">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="group" x-data="{ uploading: false, progress: 0 }"
+                                x-on:livewire-upload-start="uploading = true"
+                                x-on:livewire-upload-finish="uploading = false"
+                                x-on:livewire-upload-cancel="uploading = false"
+                                x-on:livewire-upload-error="uploading = false"
+                                x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                <label for="fileInputDragDrop1" class="font-medium text-primary group-focus-within:underline dark:text-primary-dark">
+                                    <input wire:model="fileInputDragDrop" id="fileInputDragDrop1" type="file" class="sr-only" aria-describedby="validFileFormats" />
+                                    Busca
+                                    <div x-show="uploading">
+                                        <progress max="100" x-bind:value="progress"></progress>
+                                    </div>
+                                </label>
+                                o arrastra y suelta aquí
+                            </div>
+                            <small id="validFileFormats">PDF, Max 5MB</small>
+
                         </div>
-                        <small id="validFileFormats">PDF,Docx - Max 5MB</small>
+
+                        <div x-show="!open" class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface hover:cursor-pointer" wire:click="capturarFoto">
+                            <small class="text-red-500">Click aqui para subir un nuevo archivo</small>
+                            <svg width="50spx" height="50px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M13.85 4.44l-3.28-3.3-.35-.14H2.5l-.5.5V7h1V2h6v3.5l.5.5H13v1h1V4.8l-.15-.36zM10 5V2l3 3h-3zM2.5 8l-.5.5v6l.5.5h11l.5-.5v-6l-.5-.5h-11zM13 13v1H3V9h10v4zm-8-1h-.32v1H4v-3h1.06c.75 0 1.13.36 1.13 1a.94.94 0 0 1-.32.72A1.33 1.33 0 0 1 5 12zm-.06-1.45h-.26v.93h.26c.36 0 .54-.16.54-.47 0-.31-.18-.46-.54-.46zM9 12.58a1.48 1.48 0 0 0 .44-1.12c0-1-.53-1.46-1.6-1.46H6.78v3h1.06A1.6 1.6 0 0 0 9 12.58zm-1.55-.13v-1.9h.33a.94.94 0 0 1 .7.25.91.91 0 0 1 .25.67 1 1 0 0 1-.25.72.94.94 0 0 1-.69.26h-.34zm4.45-.61h-.97V13h-.68v-3h1.74v.55h-1.06v.74h.97v.55z" />
+                            </svg>
+                        </div>
+
                     </div>
-                    @else
-                    <div class="flex w-full flex-col items-center justify-center gap-2 rounded-radius border border-dashed border-outline p-8 text-on-surface dark:border-outline-dark dark:text-on-surface-dark">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" class="w-12 h-12 opacity-75">
-                            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
-                        </svg>
-                        <small id="validFileFormats">PDF,Docx - Max 5MB</small>
-                    </div>
-                    @endif
                 </div>
+
             </div>
             <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
                 <button type="button" wire:click="closeModal"
