@@ -114,6 +114,7 @@ class Index extends Component
     }
     public function eliminar()
     {
+        $this->dispatch('show-loader');
         $alergia = CtlAlergia::withTrashed()->find($this->item['id']);
         if ($alergia->deleted_at) {
             $alergia->deleted_at = null;

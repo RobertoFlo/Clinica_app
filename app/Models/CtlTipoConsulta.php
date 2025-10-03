@@ -13,6 +13,10 @@ class CtlTipoConsulta extends Model
     protected $table = "ctl_tipo_consulta";
     protected $fillable = ['nombre', 'precio'];
     protected $hidden = ['created_at', 'updated_at'];
+    public function consulta()
+    {
+        return $this->hasMany(MntConsulta::class, 'tipo_consulta_id');
+    }
 
 }
 

@@ -31,7 +31,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Documento Identidad</label>
-                    <input type="text" wire:model="documento_identidad" name="documento_identidad" placeholder="00000000-0" x-mask="00000000-0"
+                    <input type="text" wire:model="documento_identidad" name="documento_identidad" placeholder="99999999-9" x-mask="99999999-9"
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('documento_identidad') border-red-500 @enderror">
                     @error('documento_identidad') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Fecha de Creación</label>
-                    <input type="date" wire:model="fecha_creacion"
+                    <input type="date" wire:model="fecha_creacion" disabled
                         class="mt-1 block w-full border border-gray-300 rounded p-2 @error('fecha_creacion') border-red-500 @enderror">
                     @error('fecha_creacion') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -110,10 +110,13 @@
                     class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 ">Cancelar
                     </button>
                 <button type="submit"
-                    class="bg-blue-600 text-white px-6 py-2 gap-1 rounded hover:bg-blue-700 flex items-center justify-center">Guardar
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
+                    class="bg-blue-600 text-white px-5 py-2 gap-1 rounded hover:bg-blue-700 flex items-center justify-center">Guardar
+                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                        class="size-5 fill-on-info dark:fill-on-info" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg>
                 </button>
             </div>
         </form>

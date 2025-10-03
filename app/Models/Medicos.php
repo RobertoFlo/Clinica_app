@@ -16,5 +16,16 @@ class Medicos extends Model
         'apellido',
         'especialidad',
     ];
-    
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'medico_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+    public function consulta()
+    {
+        return $this->hasOne(MntConsulta::class, 'medico_id');
+    }
 }

@@ -2,42 +2,43 @@
 services:
 
     # Nginx service
-    nginx:
-        image: nginx:alpine
-        container_name: nginx
-        restart: unless-stopped
-        ports:
-            - "8000:80"
-        volumes:
-            - .:/var/www
-            - ./nginx.conf:/etc/nginx/conf.d/default.conf
-        networks:
-            - laravel
-        depends_on:
-            - app
+    # nginx:
+    #     image: nginx:alpine
+    #     container_name: nginx
+    #     restart: unless-stopped
+    #     ports:
+    #         - "8000:80"
+    #     volumes:
+    #         - .:/var/www
+    #         - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    #     networks:
+    #         - laravel
+    #     depends_on:
+    #         - app
 
     # Application service
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-            args:
-                - UID=${UID:-1000}
-                - GID=${GID:-1000}
-        user: "${UID}:${GID}"
-        image: laravel-app
-        container_name: laravel-app
-        restart: unless-stopped
-        working_dir: /var/www
-        volumes:
-            - .:/var/www
-            - ./vendor:/var/www/vendor
-            - ./storage:/var/www/storage
-        networks:
-            - laravel
-        depends_on:
-            - db
-    # PostgreSQL service
+    # app:
+    #     build:
+    #         context: .
+    #         dockerfile: Dockerfile
+    #         args:
+    #             - UID=${UID:-1000}
+    #             - GID=${GID:-1000}
+    #     user: "${UID}:${GID}"
+    #     image: laravel-app
+    #     container_name: laravel-app
+    #     restart: unless-stopped
+    #     working_dir: /var/www
+    #     volumes:
+    #         - .:/var/www
+    #         - ./storage:/var/www/storage
+    #         - app-vendor:/var/www/vendor
+    #         - app-node_modules:/var/www/node_modules
+    #     networks:
+    #         - laravel
+    #     depends_on:
+    #         - db
+    # # PostgreSQL service
     db:
         image: postgres:13
         container_name: db
@@ -50,8 +51,8 @@ services:
             - pgdata:/var/lib/postgresql/data
         ports:
             - "5432:5432"
-        networks:
-            - laravel
+        # networks:
+        #     - laravel
 
 # # Volumes for persisting data
 volumes:
@@ -59,6 +60,6 @@ volumes:
     # app-vendor:
     # app-node_modules:
 
-# Networks for container communication
-networks:
-    laravel:
+# # Networks for container communication
+# networks:
+#     laravel:

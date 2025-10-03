@@ -47,4 +47,9 @@ class User extends Authenticatable
         ];
     }
     protected string $guard_name = 'web';// eso es para que funcione con sanctum o web en los permisos de Spatie
+
+    public function medico()
+    {
+        return $this->hasOne(Medicos::class, 'usuario_id');
+    }
 }

@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+
 class MntExpediente extends Model
 {
-    use SoftDeletes;
+    use HasFactory,SoftDeletes;
+
 
     protected $table = 'mnt_expediente';
 
@@ -19,5 +23,13 @@ class MntExpediente extends Model
     public function paciente()
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');
+    }
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'expediente_id');
+    }
+     public function consultas()
+    {
+        return $this->hasMany(MntConsulta::class, 'expediente_id');
     }
 }

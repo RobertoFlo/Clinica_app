@@ -65,16 +65,29 @@ class TipoConsultaSeeder extends Seeder
             'Consulta de Coloproctología',
             'Consulta de Medicina Familiar',
         ];
-
+        $estados = [
+            'Activo',
+            'En proceso',
+            'Inactivo',
+            'Pendiente',
+            'Cancelado',
+            'Completado',
+        ];
+        $data_estados = collect($estados)->map(function ($estados)  {
+            return [
+                'nombre' => $estados,
+                'created_at' => Carbon::now(),
+            ];
+        });
         $data = collect($consultas)->map(function ($consulta) {
             return [
                 'nombre' => $consulta,
-                'precio' => rand(30, 200) + rand(0, 99) / 100, // Precios entre $30 y $200
+                'precio' => rand(5, 100) + rand(0, 99) / 100, // Precios entre $5 y $100
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
         });
-
+        DB::table('ctl_estado')->insert($data_estados->toArray());
         DB::table('ctl_tipo_consulta')->insert($data->toArray());
     }
 }

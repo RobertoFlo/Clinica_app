@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Livewire\Consultas;
+namespace App\Livewire\TipoConsulta;
 
 use App\Models\CtlTipoConsulta;
-use App\Models\CtlTipoExamen;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
+
+#[Title('Tipos de Consultas')]
 class Consulta extends Component
 {
     use WithPagination;
@@ -114,6 +116,7 @@ class Consulta extends Component
     }
     public function eliminar()
     {
+        $this->dispatch('show-loader');
         $registro = CtlTipoConsulta::withTrashed()->find($this->item['id']);
         if ($registro->deleted_at) {
             $registro->deleted_at = null;
@@ -141,10 +144,10 @@ class Consulta extends Component
     
     public function render()
     {
-        $paginator = CtlTipoConsulta::withTrashed()->orderBy('id')->paginate($this->perPage);
-        return view('livewire.consultas.consulta',[
+        $paginator = CtlTipoConsulta::withTrashed()->orderBy('fecha_consulta', 'desc')->paginate($this->perPage);
+        return view('livewire.tipoconsulta.consulta',[
             'paginator'=> $paginator,
-            'datos' => $paginator->items(),
+            'datos' => collect($paginator->items())->map->toArray()->all(),
         ]);
     }
 }

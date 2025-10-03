@@ -49,22 +49,5 @@ class CategoriaAlergiaSeeder extends Seeder
                 }
             }
         }
-        // DB::table('ctl_nvl_alergia')->insert([
-        //     [
-        //         'nombre' => 'Leve',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        //     [
-        //         'nombre' => 'Moderada',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        //     [
-        //         'nombre' => 'Severa (Anafilaxia)',
-        //         'created_at' => Carbon::now(),
-        //         'updated_at' => Carbon::now(),
-        //     ],
-        // ]);
     }
 }

@@ -14,4 +14,9 @@ class CtlTipoExamen extends Model
     protected $fillable = ['nombre', 'precio'];
     protected $hidden = ['created_at', 'updated_at'];
 
+    public function examenes()
+    {
+        return $this->hasMany(MntExamen::class, 'tipo_examen_id');
+    }
+
 }

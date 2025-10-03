@@ -7,7 +7,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
 
+#[Title('Tipos de Examenes')]
 class Examen extends Component
 {
     use WithPagination;
@@ -116,6 +118,7 @@ class Examen extends Component
     }
     public function eliminar()
     {
+        $this->dispatch('show-loader');
         $examen = CtlTipoExamen::withTrashed()->find($this->item['id']);
         if ($examen->deleted_at) {
             $examen->deleted_at = null;
