@@ -109,7 +109,7 @@ return new class extends Migration
             $table->unsignedBigInteger('clinico_id')->nullable();
             $table->date('fecha_consulta');
             $table->unsignedBigInteger('tipo_consulta_id');
-            $table->string('descripcion_consulta')->nullable();
+            $table->text('descripcion_consulta')->nullable();
             $table->unsignedBigInteger('medico_id')->nullable();
             $table->unsignedBigInteger('estado_id')->nullable();
             $table->decimal('subtotal_final', 10, 2)->nullable();

@@ -10,6 +10,7 @@ use App\Models\MntClinico;
 use App\Models\MntExpediente;
 use App\Models\CtlTipoExamen;
 use App\Models\CtlEstado;
+use App\Models\MntConsulta;
 use App\Models\MntExamen;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,7 @@ class Examenes extends Component
     public $tabla_examenes = [];
     //
     public $showModal = false;
+    public $showModalClinica = false;
     public $showModalExamen = false;
     public $foto = false;
     public function mount($id = null)
@@ -116,6 +118,63 @@ class Examenes extends Component
                     'message' => 'Acción no reconocida. Inténtalo de nuevo.'
                 ]);
                 break;
+        }
+    }
+    public function editEstado()
+    {
+        $this->select_estado_examen_id = $this->persona_registo_examen['estado_id'];
+        $this->showModalClinica = true;
+    }
+    public function closeModalClinica()
+    {
+        $this->reset('select_estado_examen', 'select_estado_examen_id');
+        $this->resetErrorBag();
+        $this->showModalClinica = false;
+    }
+    public function saveestadoClinica()
+    {
+        $this->validate([
+            'select_estado_examen_id' => 'required',
+        ], [
+            'select_estado_examen_id.required' => 'El estado es obligatorio.',
+            'select_estado_examen_id.exists' => 'El estado seleccionado no es válido.',
+        ]);
+        if ($this->select_estado_examen_id == 6) {
+            $resultado = DB::table('mnt_examen as e')
+                ->where('e.clinico_id', '=', $this->persona_registo_examen['id'])
+                ->where('e.estado_id', '!=', 6) // Asegurarse de que no haya examenes pendientes
+                ->select('e.*')
+                ->get();
+            if ($resultado->count() > 0) {
+                $this->dispatch('notify', [
+                    'variant' => 'warning',
+                    'title' => 'Atención',
+                    'message' => 'No se puede cambiar el estado a "Completado" mientras haya exámenes pendientes.'
+                ]);
+                return;
+            } else {
+                MntClinico::where('id', $this->persona_registo_examen['id'])->update([
+                    'estado_id' => $this->select_estado_examen_id,
+                ]);
+                $this->dispatch('notify', [
+                    'variant' => 'success',
+                    'title' => 'Éxito',
+                    'message' => 'El estado de la ficha clínica ha sido actualizado correctamente.'
+                ]);
+                $this->closeModalClinica();
+            }
+        } else {
+            MntClinico::where('id', $this->persona_registo_examen['id'])->update([
+                'estado_id' => $this->select_estado_examen_id,
+            ]);
+
+            $this->dispatch('notify', [
+                'variant' => 'success',
+                'title' => 'Éxito',
+                'message' => 'El estado de la ficha clínica ha sido actualizado correctamente.'
+            ]);
+
+            $this->closeModalClinica();
         }
     }
     public function editEstadoClinico()

@@ -37,9 +37,9 @@
                             <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->telefono ?? 'N/A' }}</dd>
                             <dt class="text-sm font-medium text-gray-500">Estado Clínico de los exámenes</dt>
                             <div class="flex items-center gap-2">
-                                <dd class=" text-sm text-blue-900 font-bold">{{ $persona_registo_examen->estadoclinico->nombre ?? 'N/A' }}</dd>
+                                <dd class=" text-sm text-blue-900 font-bold">{!! formatValue($persona_registo_examen->estadoclinico->nombre) !!}</dd>
                                 @if($modo_edicion)
-                                <button wire:click="editEstadoClinico" class="text-sm text-white hover:underline bg-blue-500 border-blue-900 rounded-full px-3 py-1 ">Editar</button>
+                                <button wire:click="editEstado" class="text-sm text-white hover:underline bg-blue-500 border-blue-900 rounded-full px-3 py-1 ">Editar</button>
                                 @endif
                             </div>
                             <dt class="text-sm font-medium text-gray-500">Total valor de Examenes</dt>
@@ -107,7 +107,7 @@
                             <dd class="mt-1 text-sm text-gray-900">{{ $persona_registo_examen->expediente->paciente->telefono ?? 'N/A' }}</dd>
                             <dt class="text-sm font-medium text-gray-500">Estado Clínico de los exámenes</dt>
                             <div class="flex items-center gap-2">
-                                <dd class=" text-sm text-blue-900 font-bold">{{ $persona_registo_examen->estadoclinico->nombre ?? 'N/A' }}</dd>
+                                <dd class=" text-sm text-blue-900 font-bold">{!! formatValue($persona_registo_examen->estadoclinico->nombre) !!}</dd>
                             </div>
                             <dt class="text-sm font-medium text-gray-500">Total valor de Examenes</dt>
                             <dd class="mt-1 text-sm text-red-900 font-bold  ">$ {{ $persona_registo_examen->total_pagar ?? '--' }}</dd>
@@ -190,7 +190,7 @@
                                 <p class="text-sm"><strong>Documento:</strong> {{ $persona_registo_examen->expediente->paciente->documento_identidad ?? 'N/A' }}</p>
                                 <p class="text-sm"><strong>Sexo:</strong> {{ $persona_registo_examen->expediente->paciente->sexo ?? 'N/A' }}</p>
                                 <p class="text-sm"><strong>Teléfono:</strong> {{ $persona_registo_examen->expediente->paciente->telefono ?? 'N/A' }}</p>
-                                <p class="text-sm"><strong>Estado Clínico:</strong> {{ $persona_registo_examen->estadoClinico->nombre ?? 'N/A' }}</p>
+                                <p class="text-sm"><strong>Estado Clínico:</strong> {!! formatValue($persona_registo_examen->estadoClinico->nombre) !!}</p>
                                 <p class="text-sm"><strong>Total de Examenes:</strong>${{ $persona_registo_examen->total_pagar ?? '0.00' }}</p>
                             </div>
 
@@ -248,7 +248,7 @@
         </div>
     </div>
     @endif
-    <div wire:show="showModal" x-transition.opacity.duration.500ms
+    <div wire:show="showModal" x-transition.opacity.duration.500ms x-cloak
         class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
         <div wire:show="showModal" x-transition:enter="ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
@@ -312,7 +312,7 @@
 
             </div>
             <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
-                <button type="button" wire:click="closeModal"
+                <button type="button" wire:click="closeModalClinica"
                     class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
                     Cancelar
                 </button>
@@ -323,7 +323,45 @@
             </div>
         </div>
     </div>
-    <div wire:show="showModalExamen" x-transition.opacity.duration.500ms
+     <div wire:show="showModalClinica" x-transition.opacity.duration.500ms x-cloak
+        class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
+        <div wire:show="showModalClinica" x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="transform overflow-hidden rounded-lg bg-white border border-gray-200 shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm">
+            <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4 space-y-3">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left space-y-3">
+                    <h3 id="dialog-title" class="text-xl font-semibold text-center leading-6">
+                        Actualización del Estado de Fecha Clínica
+                    </h3>
+                    <p class="text-sm text-center text-gray-500">Al realizar este acción es de forma
+                        inmediata.</p>
+                    <div class="flex justify-center flex-col items-center">
+                        <select wire:model="select_estado_examen_id"
+                            class="mt-1 block w-9/12 border border-gray-300 rounded p-2 @error('select_estado_examen_id') border-red-500 @enderror">
+                            <option value="">Seleccione un estado</option>
+                            @foreach($estados_examenes as $estado)
+                            <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
+                            @endforeach
+                        </select>
+                        @error('select_estado_examen_id') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+            </div>
+            <div class=" px-4 py-3 flex flex-col justify-center sm:flex-row gap-2">
+                <button type="button" wire:click="closeModalClinica"
+                    class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 sm:ml-3 sm:w-auto">
+                    Cancelar
+                </button>
+                <button type="button" wire:click="saveestadoClinica" x-on:click="$dispatch('show-loader')"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-blue-400 sm:mt-0 sm:w-auto">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div wire:show="showModalExamen" x-transition.opacity.duration.500ms x-cloak
         class="hs-overlay fixed inset-0 z-[60] bg-transparent bg-opacity-50 flex justify-center items-center">
         <div wire:show="showModalExamen" x-transition:enter="ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
