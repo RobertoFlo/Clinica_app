@@ -79,7 +79,7 @@
 
                 </div>
                 <div class="flex justify-end mt-4">
-                    <button wire:click="guardarIndicaciones" class="bg-blue-500 text-white rounded-md p-2">Finalizar consulta</button>
+                    <button wire:click="findeconsulta" class="bg-blue-500 text-white rounded-md p-2">Finalizar consulta</button>
                 </div>
             </div>
             <div wire:show="showModal" x-transition.opacity.duration.500ms x-cloak

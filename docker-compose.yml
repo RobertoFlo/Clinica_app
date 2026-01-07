@@ -39,12 +39,12 @@ services:
     #     depends_on:
     #         - db
     # # PostgreSQL service
-    db:
-        image: postgres:13
-        container_name: db
+    rh:
+        image: postgres:16
+        container_name: rh
         restart: unless-stopped
         environment:
-            POSTGRES_DB: clinica_app
+            POSTGRES_DB: rh
             POSTGRES_USER: root
             POSTGRES_PASSWORD: Admin123
         volumes:

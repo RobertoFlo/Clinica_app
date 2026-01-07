@@ -21,7 +21,6 @@ class Mantenimiento extends Component
 {
     use WithPagination;
     ///modo creacion 
-
     public $expedientes = [];
     public $search_expediente = '';
     public $paciente_selected;
@@ -61,10 +60,7 @@ class Mantenimiento extends Component
     }
     public function updatedDescripcionConsulta()
     {
-        // dd($this->descripcion_consulta);
-        // if (strlen($this->descripcion_consulta) > 0) {
-          MntConsulta::where('id', $this->paciente_selected->id)->update(['descripcion_consulta' => $this->descripcion_consulta]);
-
+        MntConsulta::where('id', $this->paciente_selected->id)->update(['descripcion_consulta' => $this->descripcion_consulta]);
     }
     public function buscarPaciente()
     {
@@ -182,15 +178,24 @@ class Mantenimiento extends Component
         session()->forget('modo_edicion');
         session()->forget('consulta');
         session()->forget('expediente');
-        $this->reset('paciente_selected', 'tipo_consulta_selected', 'medico_selected','search_expediente','expedientes','tipo_consulta','medicos');
+        $this->reset('paciente_selected', 'tipo_consulta_selected', 'medico_selected','search_expediente','expedientes','tipo_consulta','medicos','descripcion_consulta','indicaciones_medicas');
         $ruta =  session()->get('previous_url');
         return redirect()->to($ruta);
     }
-
+    public function findeconsulta(){
+        MntConsulta::where('id', $this->paciente_selected->id)->update(['estado_id' => 6]);
+        session()->forget('modo_edicion');
+        session()->forget('consulta');
+        session()->forget('expediente');
+        $this->reset('paciente_selected', 'tipo_consulta_selected', 'medico_selected','search_expediente','expedientes','tipo_consulta','medicos','descripcion_consulta','indicaciones_medicas');
+        $ruta =  session()->get('previous_url');
+        return redirect()->to($ruta);
+    }
     public function render()
     {
         $this->tipo_consulta = CtlTipoConsulta::all();
         $this->medicos = Medicos::all();
         return view('livewire.consulta.mantenimiento', ['expedientes' => $this->expedientes, 'paciente_selected' => $this->paciente_selected, 'tipo_consulta' => $this->tipo_consulta, 'medicos' => $this->medicos,'paciente_selected_examenes' => $this->paciente_selected_examenes, 'informacion_ficha' => $this->informacion_ficha]);
     }
+    
 }
